@@ -2619,10 +2619,10 @@ ansi-styles@^5.0.0:
   resolved "https://registry.nlark.com/ansi-styles/download/ansi-styles-5.2.0.tgz#07449690ad45777d1924ac2abb2fc8895dba836b"
   integrity sha1-B0SWkK1Fd30ZJKwquy/IiV26g2s=
 
-ant-design-vue@2.2.8:
-  version "2.2.8"
-  resolved "https://registry.nlark.com/ant-design-vue/download/ant-design-vue-2.2.8.tgz#fa87cf6842d8ee9a0d8af393ff4099ecc4072f2b"
-  integrity sha1-+ofPaELY7poNivOT/0CZ7MQHLys=
+ant-design-vue@2.2.7:
+  version "2.2.7"
+  resolved "http://43.239.120.231:11381/repository/npm/ant-design-vue/-/ant-design-vue-2.2.7.tgz#d306d478003862f1a4cec3d52edb99c19064730a"
+  integrity sha1-0wbUeAA4YvGkzsPVLtuZwZBkcwo=
   dependencies:
     "@ant-design/icons-vue" "^6.0.0"
     "@babel/runtime" "^7.10.5"
