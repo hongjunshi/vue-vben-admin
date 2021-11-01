@@ -7,3 +7,7 @@
 **/*.sh
 
 /public/*
+/api/index.ts
+/api/config.ts
+/api/httpRequest.ts
+/api/types.ts

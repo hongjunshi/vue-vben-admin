@@ -1,4 +1,3 @@
-import type { UserInfo } from '/#/store';
 import type { ErrorMessageMode } from '/#/axios';
 import { defineStore } from 'pinia';
 import { store } from '/@/store';
@@ -6,8 +5,8 @@ import { RoleEnum } from '/@/enums/roleEnum';
 import { PageEnum } from '/@/enums/pageEnum';
 import { ROLES_KEY, TOKEN_KEY, USER_INFO_KEY } from '/@/enums/cacheEnum';
 import { getAuthCache, setAuthCache } from '/@/utils/auth';
-import { GetUserInfoModel, LoginParams } from '/@/api/sys/model/userModel';
-import { doLogout, getUserInfo, loginApi } from '/@/api/sys/user';
+import { LoginParams } from '/@/api/sys/model/userModel';
+import { login, logout } from '/@/api/oauth2';
 import { useI18n } from '/@/hooks/web/useI18n';
 import { useMessage } from '/@/hooks/web/useMessage';
 import { router } from '/@/router';
@@ -16,9 +15,11 @@ import { RouteRecordRaw } from 'vue-router';
 import { PAGE_NOT_FOUND_ROUTE } from '/@/router/routes/basic';
 import { isArray } from '/@/utils/is';
 import { h } from 'vue';
+import { userInfo } from '/@/api/system';
+import { User } from '/@/api/system/types';
 
 interface UserState {
-  userInfo: Nullable<UserInfo>;
+  userInfo: Nullable<User>;
   token?: string;
   roleList: RoleEnum[];
   sessionTimeout?: boolean;
@@ -40,8 +41,8 @@ export const useUserStore = defineStore({
     lastUpdateTime: 0,
   }),
   getters: {
-    getUserInfo(): UserInfo {
-      return this.userInfo || getAuthCache<UserInfo>(USER_INFO_KEY) || {};
+    getUserInfo(): User {
+      return this.userInfo || getAuthCache<User>(USER_INFO_KEY) || {};
     },
     getToken(): string {
       return this.token || getAuthCache<string>(TOKEN_KEY);
@@ -65,7 +66,7 @@ export const useUserStore = defineStore({
       this.roleList = roleList;
       setAuthCache(ROLES_KEY, roleList);
     },
-    setUserInfo(info: UserInfo | null) {
+    setUserInfo(info: User | null) {
       this.userInfo = info;
       this.lastUpdateTime = new Date().getTime();
       setAuthCache(USER_INFO_KEY, info);
@@ -86,21 +87,21 @@ export const useUserStore = defineStore({
       params: LoginParams & {
         goHome?: boolean;
         mode?: ErrorMessageMode;
-      },
-    ): Promise<GetUserInfoModel | null> {
+      }
+    ): Promise<User | null> {
       try {
         const { goHome = true, mode, ...loginParams } = params;
-        const data = await loginApi(loginParams, mode);
-        const { token } = data;
+        const data = await login(loginParams, mode);
+        const { access_token } = data;
 
         // save token
-        this.setToken(token);
+        this.setToken(access_token);
         return this.afterLoginAction(goHome);
       } catch (error) {
         return Promise.reject(error);
       }
     },
-    async afterLoginAction(goHome?: boolean): Promise<GetUserInfoModel | null> {
+    async afterLoginAction(goHome?: boolean): Promise<User | null> {
       if (!this.getToken) return null;
       // get user info
       const userInfo = await this.getUserInfoAction();
@@ -118,23 +119,24 @@ export const useUserStore = defineStore({
           router.addRoute(PAGE_NOT_FOUND_ROUTE as unknown as RouteRecordRaw);
           permissionStore.setDynamicAddedRoute(true);
         }
-        goHome && (await router.replace(userInfo?.homePath || PageEnum.BASE_HOME));
+        goHome &&
+          (await router.replace(userInfo?.additionalInformation?.homepage || PageEnum.BASE_HOME));
       }
       return userInfo;
     },
-    async getUserInfoAction(): Promise<UserInfo | null> {
+    async getUserInfoAction(): Promise<User | null> {
       if (!this.getToken) return null;
-      const userInfo = await getUserInfo();
-      const { roles = [] } = userInfo;
+      const userInfoResult = await userInfo();
+      const { roles = [] } = userInfoResult;
       if (isArray(roles)) {
-        const roleList = roles.map((item) => item.value) as RoleEnum[];
+        const roleList = roles.map((item) => item.code) as RoleEnum[];
         this.setRoleList(roleList);
       } else {
-        userInfo.roles = [];
+        userInfoResult.roles = [];
         this.setRoleList([]);
       }
-      this.setUserInfo(userInfo);
-      return userInfo;
+      this.setUserInfo(userInfoResult);
+      return userInfoResult;
     },
     /**
      * @description: logout
@@ -142,7 +144,7 @@ export const useUserStore = defineStore({
     async logout(goLogin = false) {
       if (this.getToken) {
         try {
-          await doLogout();
+          await logout();
         } catch {
           console.log('注销Token失败');
         }
