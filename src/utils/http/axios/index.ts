@@ -48,12 +48,15 @@ const transform: AxiosTransform = {
       throw new Error(t('sys.api.apiRequestFailed'));
     }
     //  这里 code，result，message为 后台统一的字段，需要在 types.ts内修改为项目自己的接口返回格式
-    const { code, result, message } = data;
+    const { code, message } = data;
 
     // 这里逻辑可以根据项目进行修改
-    const hasSuccess = data && Reflect.has(data, 'code') && code === ResultEnum.SUCCESS;
+    const hasSuccess =
+      data &&
+      Reflect.has(data, 'code') &&
+      (code === ResultEnum.SUCCESS || code === ResultEnum.CREATED);
     if (hasSuccess) {
-      return result;
+      return data.data;
     }
 
     // 在此处根据自己项目的实际情况对不同的code执行不同的操作
@@ -120,7 +123,7 @@ const transform: AxiosTransform = {
         if (joinParamsToUrl) {
           config.url = setObjToUrlParams(
             config.url as string,
-            Object.assign({}, config.params, config.data),
+            Object.assign({}, config.params, config.data)
           );
         }
       } else {
@@ -198,8 +201,8 @@ function createAxios(opt?: Partial<CreateAxiosOptions>) {
       {
         // See https://developer.mozilla.org/en-US/docs/Web/HTTP/Authentication#authentication_schemes
         // authentication schemes，e.g: Bearer
-        // authenticationScheme: 'Bearer',
-        authenticationScheme: '',
+        authenticationScheme: 'Bearer',
+        // authenticationScheme: '',
         timeout: 10 * 1000,
         // 基础接口地址
         // baseURL: globSetting.apiUrl,
@@ -235,8 +238,8 @@ function createAxios(opt?: Partial<CreateAxiosOptions>) {
           withToken: true,
         },
       },
-      opt || {},
-    ),
+      opt || {}
+    )
   );
 }
 export const defHttp = createAxios();

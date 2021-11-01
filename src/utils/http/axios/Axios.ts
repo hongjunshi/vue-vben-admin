@@ -1,13 +1,12 @@
-import type { AxiosRequestConfig, AxiosInstance, AxiosResponse, AxiosError } from 'axios';
+import type { AxiosError, AxiosInstance, AxiosRequestConfig, AxiosResponse } from 'axios';
+import axios from 'axios';
 import type { RequestOptions, Result, UploadFileParams } from '/#/axios';
 import type { CreateAxiosOptions } from './axiosTransform';
-import axios from 'axios';
 import qs from 'qs';
 import { AxiosCanceler } from './axiosCancel';
 import { isFunction } from '/@/utils/is';
 import { cloneDeep } from 'lodash-es';
-import { ContentTypeEnum } from '/@/enums/httpEnum';
-import { RequestEnum } from '/@/enums/httpEnum';
+import { ContentTypeEnum, RequestEnum } from '/@/enums/httpEnum';
 
 export * from './axiosTransform';
 
@@ -185,6 +184,10 @@ export class VAxios {
 
   put<T = any>(config: AxiosRequestConfig, options?: RequestOptions): Promise<T> {
     return this.request({ ...config, method: 'PUT' }, options);
+  }
+
+  patch<T = any>(config: AxiosRequestConfig, options?: RequestOptions): Promise<T> {
+    return this.request({ ...config, method: 'PATCH' }, options);
   }
 
   delete<T = any>(config: AxiosRequestConfig, options?: RequestOptions): Promise<T> {

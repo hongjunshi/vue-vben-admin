@@ -1,5 +1,5 @@
+import type { AppRouteRecordRaw, Menu, MenuModule } from '/@/router/types';
 import { AppRouteModule } from '/@/router/types';
-import type { MenuModule, Menu, AppRouteRecordRaw } from '/@/router/types';
 import { findPath, treeMap } from '/@/utils/helper/treeHelper';
 import { cloneDeep } from 'lodash-es';
 import { isUrl } from '/@/utils/is';
@@ -60,6 +60,7 @@ export function transformRouteToMenu(routeModList: AppRouteModule[], routerMappi
         ...(node.meta || {}),
         meta: node.meta,
         name: title,
+        icon: node.icon,
         hideMenu,
         path: node.path,
         ...(node.redirect ? { redirect: node.redirect } : {}),
@@ -74,6 +75,7 @@ export function transformRouteToMenu(routeModList: AppRouteModule[], routerMappi
  * config menu with given params
  */
 const menuParamRegex = /(?::)([\s\S]+?)((?=\/)|$)/g;
+
 export function configureDynamicParamsMenu(menu: Menu, params: RouteParams) {
   const { path, paramPath } = toRaw(menu);
   let realPath = paramPath ? paramPath : path;

@@ -1,0 +1,7 @@
+{
+  "url": "http://localhost:9106/v2/api-docs",
+  "dir": "./src/api",
+  "prefix": "/api",
+  "methodName": "{operationId}",
+  "prettierPath": ".prettierrc"
+}

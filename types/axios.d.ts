@@ -29,7 +29,7 @@ export interface Result<T = any> {
   code: number;
   type: 'success' | 'error' | 'warning';
   message: string;
-  result: T;
+  data?: T;
 }
 
 // multipart/form-data: upload file
@@ -42,5 +42,6 @@ export interface UploadFileParams {
   file: File | Blob;
   // file name
   filename?: string;
+
   [key: string]: any;
 }

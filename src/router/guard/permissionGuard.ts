@@ -22,10 +22,10 @@ export function createPermissionGuard(router: Router) {
     if (
       from.path === ROOT_PATH &&
       to.path === PageEnum.BASE_HOME &&
-      userStore.getUserInfo.homePath &&
-      userStore.getUserInfo.homePath !== PageEnum.BASE_HOME
+      userStore.getUserInfo?.additionalInformation?.homepage &&
+      userStore.getUserInfo?.additionalInformation?.homepage !== PageEnum.BASE_HOME
     ) {
-      next(userStore.getUserInfo.homePath);
+      next(userStore.getUserInfo?.additionalInformation?.homepage);
       return;
     }
 
@@ -74,9 +74,11 @@ export function createPermissionGuard(router: Router) {
     if (
       from.path === LOGIN_PATH &&
       to.name === PAGE_NOT_FOUND_ROUTE.name &&
-      to.fullPath !== (userStore.getUserInfo.homePath || PageEnum.BASE_HOME)
+      to.fullPath !==
+        (userStore.getUserInfo?.additionalInformation?.homepage || PageEnum.BASE_HOME) &&
+      to.fullPath !== PageEnum.BASE_HOME_REDIRECT
     ) {
-      next(userStore.getUserInfo.homePath || PageEnum.BASE_HOME);
+      next(userStore.getUserInfo?.additionalInformation?.homepage || PageEnum.BASE_HOME);
       return;
     }
 

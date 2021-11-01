@@ -6,7 +6,7 @@ import { useI18n } from '/@/hooks/web/useI18n';
 import { useUserStore } from './user';
 import { useAppStoreWithOut } from './app';
 import { toRaw } from 'vue';
-import { transformObjToRoute, flatMultiLevelRoutes } from '/@/router/helper/routeHelper';
+import { flatMultiLevelRoutes, transformObjToRoute } from '/@/router/helper/routeHelper';
 import { transformRouteToMenu } from '/@/router/helper/menuHelper';
 
 import projectSetting from '/@/settings/projectSetting';
@@ -18,11 +18,9 @@ import { ERROR_LOG_ROUTE, PAGE_NOT_FOUND_ROUTE } from '/@/router/routes/basic';
 
 import { filter } from '/@/utils/helper/treeHelper';
 
-import { getMenuList } from '/@/api/sys/menu';
-import { getPermCode } from '/@/api/sys/user';
-
 import { useMessage } from '/@/hooks/web/useMessage';
 import { PageEnum } from '/@/enums/pageEnum';
+import { PermissionEntity } from '/@/api/system/types';
 
 interface PermissionState {
   // Permission code list
@@ -35,6 +33,7 @@ interface PermissionState {
   backMenuList: Menu[];
   frontMenuList: Menu[];
 }
+
 export const usePermissionStore = defineStore({
   id: 'app-permission',
   state: (): PermissionState => ({
@@ -66,7 +65,7 @@ export const usePermissionStore = defineStore({
     },
   },
   actions: {
-    setPermCodeList(codeList: string[]) {
+    setPermCodeList(codeList: string[] = []) {
       this.permCodeList = codeList;
     },
 
@@ -93,7 +92,10 @@ export const usePermissionStore = defineStore({
       this.lastBuildMenuTime = 0;
     },
     async changePermissionCode() {
-      const codeList = await getPermCode();
+      const userStore = useUserStore();
+      const userInfo = userStore.getUserInfo;
+      const { permissions = [] } = userInfo;
+      const codeList = permissions.map((p) => p.code) as string[];
       this.setPermCodeList(codeList);
     },
     async buildRoutesAction(): Promise<AppRouteRecordRaw[]> {
@@ -123,7 +125,9 @@ export const usePermissionStore = defineStore({
        * */
       const patchHomeAffix = (routes: AppRouteRecordRaw[]) => {
         if (!routes || routes.length === 0) return;
-        let homePath: string = userStore.getUserInfo.homePath || PageEnum.BASE_HOME;
+        let homePath: string =
+          userStore.getUserInfo.additionalInformation?.homepage || PageEnum.BASE_HOME;
+
         function patcher(routes: AppRouteRecordRaw[], parentPath = '') {
           if (parentPath) parentPath = parentPath + '/';
           routes.forEach((route: AppRouteRecordRaw) => {
@@ -140,6 +144,7 @@ export const usePermissionStore = defineStore({
             children && children.length > 0 && patcher(children, currentPath);
           });
         }
+
         try {
           patcher(routes);
         } catch (e) {
@@ -185,7 +190,10 @@ export const usePermissionStore = defineStore({
           let routeList: AppRouteRecordRaw[] = [];
           try {
             this.changePermissionCode();
-            routeList = (await getMenuList()) as AppRouteRecordRaw[];
+            const userStore = useUserStore();
+            const userInfo = userStore.getUserInfo;
+            const { permissions } = userInfo;
+            routeList = buildRouteFromPermissions(permissions as PermissionEntity[]);
           } catch (error) {
             console.error(error);
           }
@@ -216,4 +224,30 @@ export const usePermissionStore = defineStore({
 // Need to be used outside the setup
 export function usePermissionStoreWithOut() {
   return usePermissionStore(store);
+}
+
+export function buildRouteFromPermissions(
+  permissions: PermissionEntity[],
+  parentId?: string
+): AppRouteRecordRaw[] {
+  return permissions
+    .filter((p) => (parentId ? p.parent && p.parent.id && p.parent.id === parentId : !p.parent))
+    .map((p) => {
+      const { id, name, component, icon, url, redirect, title, sortIndex } = p;
+      return {
+        name,
+        component,
+        path: url,
+        icon,
+        redirect,
+        orderNo: sortIndex,
+        meta: {
+          title: title,
+        },
+        children: buildRouteFromPermissions(permissions, id),
+      } as AppRouteRecordRaw;
+    })
+    .sort(function (a, b) {
+      return a.orderNo - b.orderNo;
+    });
 }
