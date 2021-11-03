@@ -80,19 +80,19 @@
       });
 
       function getMatched(menus: Menu[], parent: string[]) {
-        const metched: Menu[] = [];
+        const matched: Menu[] = [];
         menus.forEach((item) => {
           if (parent.includes(item.path)) {
-            metched.push({
+            matched.push({
               ...item,
               name: item.meta?.title || item.name,
             });
           }
           if (item.children?.length) {
-            metched.push(...getMatched(item.children, parent));
+            matched.push(...getMatched(item.children, parent));
           }
         });
-        return metched;
+        return matched;
       }
 
       function filterItem(list: RouteLocationMatched[]) {

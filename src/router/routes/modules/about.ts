@@ -8,20 +8,21 @@ const dashboard: AppRouteModule = {
   name: 'About',
   component: LAYOUT,
   redirect: '/about/index',
+  orderNo: 100000,
+  icon: 'simple-icons:about-dot-me',
   meta: {
     hideChildrenInMenu: true,
-    icon: 'simple-icons:about-dot-me',
     title: t('routes.dashboard.about'),
-    orderNo: 100000,
   },
   children: [
     {
       path: 'index',
       name: 'AboutPage',
       component: () => import('/@/views/sys/about/index.vue'),
+      orderNo: 100000,
+      icon: 'simple-icons:about-dot-me',
       meta: {
         title: t('routes.dashboard.about'),
-        icon: 'simple-icons:about-dot-me',
         hideMenu: true,
       },
     },

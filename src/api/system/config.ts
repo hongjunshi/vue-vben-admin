@@ -6,7 +6,10 @@
 import { RequestOptions } from '/#/axios';
 import type { AxiosRequestConfig } from 'axios';
 
-const defaultOptions = {};
+const defaultOptions = {
+  urlPrefix: '/api',
+  apiUrl: '/sample',
+};
 const defaultConfigs = {};
 export const overrideOptions = function (options?: RequestOptions): RequestOptions {
   return {

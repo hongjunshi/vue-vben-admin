@@ -1,10 +1,10 @@
 import type { AppRouteModule, AppRouteRecordRaw } from '/@/router/types';
 import type { Router, RouteRecordNormalized } from 'vue-router';
+import { createRouter, createWebHashHistory } from 'vue-router';
 
-import { getParentLayout, LAYOUT, EXCEPTION_COMPONENT } from '/@/router/constant';
+import { EXCEPTION_COMPONENT, getParentLayout, LAYOUT } from '/@/router/constant';
 import { cloneDeep, omit } from 'lodash-es';
 import { warn } from '/@/utils/log';
-import { createRouter, createWebHashHistory } from 'vue-router';
 
 export type LayoutMapKey = 'LAYOUT';
 const IFRAME = () => import('/@/views/sys/iframe/FrameBlank.vue');
@@ -42,7 +42,7 @@ function asyncImportRoute(routes: AppRouteRecordRaw[] | undefined) {
 
 function dynamicImport(
   dynamicViewsModules: Record<string, () => Promise<Recordable>>,
-  component: string,
+  component: string
 ) {
   const keys = Object.keys(dynamicViewsModules);
   const matchKeys = keys.filter((key) => {
@@ -58,7 +58,7 @@ function dynamicImport(
     return dynamicViewsModules[matchKey];
   } else if (matchKeys?.length > 1) {
     warn(
-      'Please do not create `.vue` and `.TSX` files with the same file name in the same hierarchical directory under the views folder. This will cause dynamic introduction failure',
+      'Please do not create `.vue` and `.TSX` files with the same file name in the same hierarchical directory under the views folder. This will cause dynamic introduction failure'
     );
     return;
   } else {
@@ -126,7 +126,7 @@ function promoteRouteLevel(routeModule: AppRouteModule) {
 function addToChildren(
   routes: RouteRecordNormalized[],
   children: AppRouteRecordRaw[],
-  routeModule: AppRouteModule,
+  routeModule: AppRouteModule
 ) {
   for (let index = 0; index < children.length; index++) {
     const child = children[index];
