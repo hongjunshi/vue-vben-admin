@@ -14,7 +14,7 @@ import {
 import { useTimeoutFn } from '/@/hooks/core/useTimeout';
 import { buildUUID } from '/@/utils/uuid';
 import { isFunction, isBoolean } from '/@/utils/is';
-import { get, cloneDeep } from 'lodash-es';
+import { get, cloneDeep, merge } from 'lodash-es';
 import { FETCH_SETTING, ROW_KEY, PAGE_SIZE } from '../const';
 
 interface ActionType {
@@ -40,7 +40,7 @@ export function useDataSource(
     clearSelectedRowKeys,
     tableData,
   }: ActionType,
-  emit: EmitType,
+  emit: EmitType
 ) {
   const searchState = reactive<SearchState>({
     sortInfo: {},
@@ -61,13 +61,13 @@ export function useDataSource(
     },
     {
       immediate: true,
-    },
+    }
   );
 
   function handleTableChange(
     pagination: PaginationProps,
     filters: Partial<Recordable<string[]>>,
-    sorter: SorterResult,
+    sorter: SorterResult
   ) {
     const { clearSelectOnPageChange, sortFn, filterFn } = unref(propsRef);
     if (clearSelectOnPageChange) {
@@ -148,7 +148,7 @@ export function useDataSource(
 
   function updateTableDataRecord(
     rowKey: string | number,
-    record: Recordable,
+    record: Recordable
   ): Recordable | undefined {
     const row = findTableDataRecord(rowKey);
 
@@ -257,7 +257,7 @@ export function useDataSource(
       const { pageField, sizeField, listField, totalField } = Object.assign(
         {},
         FETCH_SETTING,
-        fetchSetting,
+        fetchSetting
       );
       let pageParams: Recordable = {};
 
@@ -272,17 +272,17 @@ export function useDataSource(
 
       const { sortInfo = {}, filterInfo } = searchState;
 
-      let params: Recordable = {
-        ...pageParams,
-        ...(useSearchForm ? getFieldsValue() : {}),
-        ...searchInfo,
-        ...(opt?.searchInfo ?? {}),
-        ...defSort,
-        ...sortInfo,
-        ...filterInfo,
-        ...(opt?.sortInfo ?? {}),
-        ...(opt?.filterInfo ?? {}),
-      };
+      let params: Recordable = merge(
+        pageParams,
+        useSearchForm ? getFieldsValue() : {},
+        searchInfo,
+        opt?.searchInfo ?? {},
+        defSort,
+        sortInfo,
+        filterInfo,
+        opt?.sortInfo ?? {},
+        opt?.filterInfo ?? {}
+      );
       if (beforeFetch && isFunction(beforeFetch)) {
         params = (await beforeFetch(params)) || params;
       }
