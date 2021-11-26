@@ -94,7 +94,7 @@
             opt.width = '100%';
           }
           const detailCls = `${prefixCls}__detail`;
-          opt.wrapClassName = wrapClassName ? `${wrapClassName} ${detailCls}` : detailCls;
+          opt.class = wrapClassName ? `${wrapClassName} ${detailCls}` : detailCls;
 
           if (!getContainer) {
             // TODO type error?
@@ -139,7 +139,7 @@
         (newVal, oldVal) => {
           if (newVal !== oldVal) visibleRef.value = newVal;
         },
-        { deep: true },
+        { deep: true }
       );
 
       watch(
@@ -149,7 +149,7 @@
             emit('visible-change', visible);
             instance && drawerInstance.emitVisible?.(visible, instance.uid);
           });
-        },
+        }
       );
 
       // Cancel event

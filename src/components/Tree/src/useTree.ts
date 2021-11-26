@@ -8,7 +8,7 @@ import { forEach } from '/@/utils/helper/treeHelper';
 
 export function useTree(
   treeDataRef: Ref<TreeDataItem[]>,
-  getReplaceFields: ComputedRef<ReplaceFields>,
+  getReplaceFields: ComputedRef<ReplaceFields>
 ) {
   function getAllKeys(list?: TreeDataItem[]) {
     const keys: string[] = [];
@@ -26,6 +26,7 @@ export function useTree(
     }
     return keys as Keys;
   }
+
   // get keys that can be checked and selected
   function getEnabledKeys(list?: TreeDataItem[]) {
     const keys: string[] = [];

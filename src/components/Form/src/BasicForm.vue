@@ -110,7 +110,7 @@
       });
 
       const getBindValue = computed(
-        () => ({ ...attrs, ...props, ...unref(getProps) } as Recordable),
+        () => ({ ...attrs, ...props, ...unref(getProps) } as Recordable)
       );
 
       const getSchema = computed((): FormSchema[] => {
@@ -122,7 +122,7 @@
             if (!Array.isArray(defaultValue)) {
               schema.defaultValue = dateUtil(defaultValue);
             } else {
-              const def: moment.Moment[] = [];
+              const def: any[] = [];
               defaultValue.forEach((item) => {
                 def.push(dateUtil(item));
               });
@@ -198,14 +198,14 @@
         },
         {
           immediate: true,
-        },
+        }
       );
 
       watch(
         () => unref(getProps).schemas,
         (schemas) => {
           resetSchema(schemas ?? []);
-        },
+        }
       );
 
       watch(
@@ -222,7 +222,7 @@
             initDefault();
             isInitedDefaultRef.value = true;
           }
-        },
+        }
       );
 
       async function setProps(formProps: Partial<FormProps>): Promise<void> {
@@ -284,7 +284,7 @@
         setFormModel,
         getFormClass,
         getFormActionBindProps: computed(
-          (): Recordable => ({ ...getProps.value, ...advanceState }),
+          (): Recordable => ({ ...getProps.value, ...advanceState })
         ),
         ...formActionType,
       };

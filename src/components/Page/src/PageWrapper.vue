@@ -5,7 +5,7 @@
       :title="title"
       v-bind="omit($attrs, 'class')"
       ref="headerRef"
-      v-if="content || $slots.headerContent || title || getHeaderSlots.length"
+      v-if="getShowHeader"
     >
       <template #default>
         <template v-if="content">
@@ -72,7 +72,7 @@
 
       provide(
         PageWrapperFixedHeightKey,
-        computed(() => props.fixedHeight),
+        computed(() => props.fixedHeight)
       );
 
       const getIsContentFullHeight = computed(() => {
@@ -85,7 +85,7 @@
         wrapperRef,
         [headerRef, footerRef],
         [contentRef],
-        getUpwardSpace,
+        getUpwardSpace
       );
       setCompensation({ useLayoutFooter: true, elements: [footerRef] });
 
@@ -98,6 +98,10 @@
           attrs.class ?? {},
         ];
       });
+
+      const getShowHeader = computed(
+        () => props.content || slots?.headerContent || props.title || getHeaderSlots.value.length
+      );
 
       const getShowFooter = computed(() => slots?.leftFooter || slots?.rightFooter);
 
@@ -138,7 +142,7 @@
         {
           flush: 'post',
           immediate: true,
-        },
+        }
       );
 
       return {
@@ -150,6 +154,7 @@
         getClass,
         getHeaderSlots,
         prefixCls,
+        getShowHeader,
         getShowFooter,
         omit,
         getContentClass,

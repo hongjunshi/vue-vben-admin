@@ -1,5 +1,6 @@
 <script lang="tsx">
   import type { ReplaceFields, Keys, CheckKeys, TreeActionType, TreeItem } from './typing';
+  import type { CheckEvent } from './typing';
 
   import {
     defineComponent,
@@ -15,22 +16,17 @@
   } from 'vue';
   import { Tree, Empty } from 'ant-design-vue';
   import { TreeIcon } from './TreeIcon';
-  import TreeHeader from './TreeHeader.vue';
   import { ScrollContainer } from '/@/components/Container';
-
   import { omit, get, difference } from 'lodash-es';
   import { isArray, isBoolean, isEmpty, isFunction } from '/@/utils/is';
   import { extendSlots, getSlot } from '/@/utils/helper/tsxHelper';
   import { filter, treeToList } from '/@/utils/helper/treeHelper';
-
   import { useTree } from './useTree';
   import { useContextMenu } from '/@/hooks/web/useContextMenu';
   import { useDesign } from '/@/hooks/web/useDesign';
-
   import { basicProps } from './props';
   import { CreateContextOptions } from '/@/components/ContextMenu';
-
-  import { CheckEvent } from './typing';
+  import TreeHeader from './TreeHeader.vue';
 
   interface State {
     expandedKeys: Keys;
@@ -120,7 +116,7 @@
       });
 
       const getTreeData = computed((): TreeItem[] =>
-        searchState.startSearch ? searchState.searchData : unref(treeDataRef),
+        searchState.startSearch ? searchState.searchData : unref(treeDataRef)
       );
 
       const getNotFound = computed((): boolean => {
@@ -209,7 +205,7 @@
         },
         {
           immediate: true,
-        },
+        }
       );
 
       watch(
@@ -218,7 +214,7 @@
           if (val) {
             handleSearch(searchState.searchText);
           }
-        },
+        }
       );
 
       function handleSearch(searchValue: string) {
@@ -245,7 +241,7 @@
             }
             return result;
           },
-          unref(getReplaceFields),
+          unref(getReplaceFields)
         );
 
         if (expandOnSearch) {
@@ -309,7 +305,7 @@
         () => props.value,
         () => {
           state.checkedKeys = toRaw(props.value || []);
-        },
+        }
       );
 
       watch(
@@ -318,7 +314,7 @@
           const v = toRaw(state.checkedKeys);
           emit('update:value', v);
           emit('change', v);
-        },
+        }
       );
 
       // watchEffect(() => {
