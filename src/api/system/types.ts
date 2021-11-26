@@ -308,6 +308,58 @@ export interface ApplicationEntity {
 
 /**
 * 
+        * Attachment
+      
+*/
+
+export interface Attachment {
+  /**
+   *
+   * 创建时间
+   * Format: date-time
+   */
+  createTime: string;
+  createUser: User;
+  /**
+   *
+   * ID
+   */
+  id: string;
+  /**
+   *
+   * 是否删除
+   * Format: int32
+   */
+  isDelete: '0' | '1';
+  /**
+   *
+   * 是否可用
+   * Format: int32
+   */
+  isEnable: '1' | '0';
+  additionalInformation?: { [x in string | number]: any };
+  correlationId?: string;
+  correlationType?: string;
+  /**
+   *
+   * Format: date-time
+   */
+  deleteTime?: string;
+  deleteUser?: User;
+  /**
+   *
+   * Format: date-time
+   */
+  lastModifyTime?: string;
+  lastModifyUser?: User;
+  originalName?: string;
+  realPath?: string;
+  reservableValues?: ReservableValues_string_;
+  url?: string;
+}
+
+/**
+* 
         * AuditableEntity
       
         * 审计数据实体
@@ -392,6 +444,28 @@ export interface CreateApiResult {
    */
   code?: '200' | '201' | '204' | '400' | '401' | '403' | '404' | '408' | '500' | '503' | '504';
   data?: ApiEntity;
+  /**
+   *
+   * 返回消息
+   */
+  message?: string;
+}
+
+/**
+* 
+        * CreateAttachmentByIdResult
+      
+        * 创建附件信息数据结果
+*/
+
+export interface CreateAttachmentByIdResult {
+  /**
+   *
+   * 返回状态码
+   * Format: int32
+   */
+  code?: '200' | '201' | '204' | '400' | '401' | '403' | '404' | '408' | '500' | '503' | '504';
+  data?: Attachment;
   /**
    *
    * 返回消息
@@ -643,6 +717,28 @@ export interface DataRestResult_Api_ {
 
 /**
 * 
+        * DataRestResult«Attachment»
+      
+        * 带数据的返回结果
+*/
+
+export interface DataRestResult_Attachment_ {
+  /**
+   *
+   * 返回状态码
+   * Format: int32
+   */
+  code?: '200' | '201' | '204' | '400' | '401' | '403' | '404' | '408' | '500' | '503' | '504';
+  data?: Attachment;
+  /**
+   *
+   * 返回消息
+   */
+  message?: string;
+}
+
+/**
+* 
         * DataRestResult«AuditableEntity»
       
         * 带数据的返回结果
@@ -867,6 +963,84 @@ export interface DataRestResult_List_Department_ {
 
 /**
 * 
+        * DataRestResult«List«DictionaryType»»
+      
+        * 带数据的返回结果
+*/
+
+export interface DataRestResult_List_DictionaryType_ {
+  /**
+   *
+   * 返回状态码
+   * Format: int32
+   */
+  code?: '200' | '201' | '204' | '400' | '401' | '403' | '404' | '408' | '500' | '503' | '504';
+  /**
+   *
+   * 返回的泛型数据
+   */
+  data?: DictionaryType[];
+  /**
+   *
+   * 返回消息
+   */
+  message?: string;
+}
+
+/**
+* 
+        * DataRestResult«List«Dictionary»»
+      
+        * 带数据的返回结果
+*/
+
+export interface DataRestResult_List_Dictionary_ {
+  /**
+   *
+   * 返回状态码
+   * Format: int32
+   */
+  code?: '200' | '201' | '204' | '400' | '401' | '403' | '404' | '408' | '500' | '503' | '504';
+  /**
+   *
+   * 返回的泛型数据
+   */
+  data?: Dictionary[];
+  /**
+   *
+   * 返回消息
+   */
+  message?: string;
+}
+
+/**
+* 
+        * DataRestResult«List«Map«string,object»»»
+      
+        * 带数据的返回结果
+*/
+
+export interface DataRestResult_List_Map_string_object_ {
+  /**
+   *
+   * 返回状态码
+   * Format: int32
+   */
+  code?: '200' | '201' | '204' | '400' | '401' | '403' | '404' | '408' | '500' | '503' | '504';
+  /**
+   *
+   * 返回的泛型数据
+   */
+  data?: Map_string_object_[];
+  /**
+   *
+   * 返回消息
+   */
+  message?: string;
+}
+
+/**
+* 
         * DataRestResult«List«Organization»»
       
         * 带数据的返回结果
@@ -910,6 +1084,58 @@ export interface DataRestResult_List_Permission_ {
    * 返回的泛型数据
    */
   data?: Permission[];
+  /**
+   *
+   * 返回消息
+   */
+  message?: string;
+}
+
+/**
+* 
+        * DataRestResult«List«string»»
+      
+        * 带数据的返回结果
+*/
+
+export interface DataRestResult_List_string_ {
+  /**
+   *
+   * 返回状态码
+   * Format: int32
+   */
+  code?: '200' | '201' | '204' | '400' | '401' | '403' | '404' | '408' | '500' | '503' | '504';
+  /**
+   *
+   * 返回的泛型数据
+   */
+  data?: string[];
+  /**
+   *
+   * 返回消息
+   */
+  message?: string;
+}
+
+/**
+* 
+        * DataRestResult«Map«string,List«Map«string,object»»»»
+      
+        * 带数据的返回结果
+*/
+
+export interface DataRestResult_Map_string_List_Map_string_object_ {
+  /**
+   *
+   * 返回状态码
+   * Format: int32
+   */
+  code?: '200' | '201' | '204' | '400' | '401' | '403' | '404' | '408' | '500' | '503' | '504';
+  /**
+   *
+   * 返回的泛型数据
+   */
+  data?: { [x: string]: Map_string_object_[] };
   /**
    *
    * 返回消息
@@ -1692,11 +1918,6 @@ export interface DictionaryTypeEntity {
   createUser: UserEntity;
   /**
    *
-   * ID
-   */
-  id: string;
-  /**
-   *
    * 是否删除
    * Format: int32
    */
@@ -1887,6 +2108,32 @@ export interface DutyEntity {
    * Format: int32
    */
   sortIndex?: number;
+}
+
+/**
+* 
+        * EnumsAllResult
+      
+        * 查询全部枚举结果
+*/
+
+export interface EnumsAllResult {
+  /**
+   *
+   * 返回状态码
+   * Format: int32
+   */
+  code?: '200' | '201' | '204' | '400' | '401' | '403' | '404' | '408' | '500' | '503' | '504';
+  /**
+   *
+   * 返回的泛型数据
+   */
+  data?: { [x: string]: Map_string_object_[] };
+  /**
+   *
+   * 返回消息
+   */
+  message?: string;
 }
 
 /**
@@ -2204,6 +2451,58 @@ export interface ListDictionaryResult {
 
 /**
 * 
+        * ListDictionaryTypeByCodeResult
+      
+        * 根据代码查询字典类型数据结果
+*/
+
+export interface ListDictionaryTypeByCodeResult {
+  /**
+   *
+   * 返回状态码
+   * Format: int32
+   */
+  code?: '200' | '201' | '204' | '400' | '401' | '403' | '404' | '408' | '500' | '503' | '504';
+  /**
+   *
+   * 返回的泛型数据
+   */
+  data?: DictionaryTypeEntity[];
+  /**
+   *
+   * 返回消息
+   */
+  message?: string;
+}
+
+/**
+* 
+        * ListDictionaryTypeItemsByCodeResult
+      
+        * 根据代码查询字典类型条目数据结果
+*/
+
+export interface ListDictionaryTypeItemsByCodeResult {
+  /**
+   *
+   * 返回状态码
+   * Format: int32
+   */
+  code?: '200' | '201' | '204' | '400' | '401' | '403' | '404' | '408' | '500' | '503' | '504';
+  /**
+   *
+   * 返回的泛型数据
+   */
+  data?: DictionaryEntity[];
+  /**
+   *
+   * 返回消息
+   */
+  message?: string;
+}
+
+/**
+* 
         * ListDictionaryTypeResult
       
         * 根据参数分页查询字典类型数据结果
@@ -2354,6 +2653,32 @@ export interface ListDutyResult {
    */
   code?: '200' | '201' | '204' | '400' | '401' | '403' | '404' | '408' | '500' | '503' | '504';
   data?: Page_DutyEntity_;
+  /**
+   *
+   * 返回消息
+   */
+  message?: string;
+}
+
+/**
+* 
+        * ListEnumsByTypeResult
+      
+        * 根据类型查询枚举结果
+*/
+
+export interface ListEnumsByTypeResult {
+  /**
+   *
+   * 返回状态码
+   * Format: int32
+   */
+  code?: '200' | '201' | '204' | '400' | '401' | '403' | '404' | '408' | '500' | '503' | '504';
+  /**
+   *
+   * 返回的泛型数据
+   */
+  data?: Map_string_object_[];
   /**
    *
    * 返回消息
@@ -2548,9 +2873,64 @@ export interface ListPermissionsQueryParams {
 export interface ListPermissionsTreeQueryParams {
   /**
    *
+   * 查询条件:权限代码，模糊匹配
+   */
+  search_code?: string;
+  /**
+   *
+   * 查询条件:创建日期起，格式yyyy-mm-dd
+   */
+  search_createDateBegin?: string;
+  /**
+   *
+   * 查询条件:创建日期止，格式yyyy-mm-dd
+   */
+  search_createDateEnd?: string;
+  /**
+   *
+   * 查询条件:权限描述，模糊匹配
+   */
+  search_description?: string;
+  /**
+   *
+   * 查询条件:权限图标，模糊匹配
+   */
+  search_icon?: string;
+  /**
+   *
+   * 查询条件:是否可用，，1：是，0：否，精确匹配
+   */
+  search_isEnable?: '0' | '1';
+  /**
+   *
+   * 查询条件:权限名称，模糊匹配
+   */
+  search_name?: string;
+  /**
+   *
+   * 查询条件:上级权限代码，模糊匹配
+   */
+  search_parentCode?: string;
+  /**
+   *
+   * 查询条件:上级权限ID，精确匹配
+   */
+  search_parentId?: string;
+  /**
+   *
+   * 查询条件:上级权限名称，模糊匹配
+   */
+  search_parentName?: string;
+  /**
+   *
    * 查询条件:权限类型，精确匹配
    */
   search_type?: string;
+  /**
+   *
+   * 查询条件:权限地址，模糊匹配
+   */
+  search_url?: string;
 }
 
 /**
@@ -2765,6 +3145,32 @@ export interface ListRolesQueryParams {
    * 排序规则，格式: 字段名[,asc|desc]，默认升序，支持多字段排序
    */
   sort?: string[];
+}
+
+/**
+* 
+        * ListTypesResult
+      
+        * 所有枚举类型结果
+*/
+
+export interface ListTypesResult {
+  /**
+   *
+   * 返回状态码
+   * Format: int32
+   */
+  code?: '200' | '201' | '204' | '400' | '401' | '403' | '404' | '408' | '500' | '503' | '504';
+  /**
+   *
+   * 返回的泛型数据
+   */
+  data?: string[];
+  /**
+   *
+   * 返回消息
+   */
+  message?: string;
 }
 
 export interface ListUsersQueryParams {
@@ -3114,6 +3520,26 @@ export interface LoadUserByIdResult {
    * 返回消息
    */
   message?: string;
+}
+
+/**
+* 
+        * Map«string,List«Map«string,object»»»
+      
+*/
+
+export interface Map_string_List_Map_string_object_ {
+  [x: string]: any;
+}
+
+/**
+* 
+        * Map«string,object»
+      
+*/
+
+export interface Map_string_object_ {
+  [x: string]: { [x in string | number]: any };
 }
 
 /**
@@ -4256,6 +4682,11 @@ export interface PermissionEntity {
    */
   lastModifyTime?: string;
   lastModifyUser?: UserEntity;
+  /**
+   *
+   * 元数据，后台动态菜单时存放前端路由的元数据，存放json格式的字符串
+   */
+  meta?: string;
   parent?: PermissionEntity;
   /**
    *
@@ -4265,7 +4696,7 @@ export interface PermissionEntity {
   /**
    *
    * 排序索引
-   * Format: int32
+   * Format: int64
    */
   sortIndex?: number;
   /**

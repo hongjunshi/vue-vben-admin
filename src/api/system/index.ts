@@ -22,6 +22,7 @@ import {
   ListRolesQueryParams,
   ListUsersQueryParams,
   ApiEntity,
+  Attachment,
   AuditableEntity,
   Department,
   DepartmentEntity,
@@ -35,6 +36,7 @@ import {
   RoleEntity,
   User,
   UserEntity,
+  Map_string_object_,
   Page_ApiEntity_,
   Page_AuditableEntity_,
   Page_DepartmentEntity_,
@@ -67,6 +69,33 @@ export function template(path: string, obj: { [x: string]: any } = {}) {
 }
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
+
+/**
+ * 创建附件信息
+ */
+export const createAttachment = (
+  body: {
+    /**
+     *
+     * attachment
+     * Format: binary
+     */
+    attachment: string;
+  },
+  options?: RequestOptions
+): Promise<Attachment> => {
+  return defHttp.post(
+    overrideConfigs({
+      url: createAttachment.key,
+      params: undefined,
+      data: body,
+    }),
+    overrideOptions(options)
+  );
+};
+
+/** Key is end point string without base url */
+createAttachment.key = '/attachments';
 
 /**
  * 根据条件查询部门，支持分页、排序
@@ -397,6 +426,52 @@ export const createDictionaryType = (
 createDictionaryType.key = '/dictionaryTypes';
 
 /**
+ * 根据代码查询字典类型
+ */
+export const listDictionaryTypesByCode = (
+  /**
+   * 字典类型代码，逗号分隔
+   */
+  codes: undefined,
+  options?: RequestOptions
+): Promise<DictionaryTypeEntity[]> => {
+  return defHttp.get(
+    overrideConfigs({
+      url: template(listDictionaryTypesByCode.key, { codes }),
+      params: undefined,
+      data: undefined,
+    }),
+    overrideOptions(options)
+  );
+};
+
+/** Key is end point string without base url */
+listDictionaryTypesByCode.key = '/dictionaryTypes/codes/{codes}';
+
+/**
+ * 根据代码查询字典类型
+ */
+export const listDictionaryTypeItemsByCode = (
+  /**
+   * 字典类型代码，逗号分隔
+   */
+  code: string,
+  options?: RequestOptions
+): Promise<DictionaryEntity[]> => {
+  return defHttp.get(
+    overrideConfigs({
+      url: template(listDictionaryTypeItemsByCode.key, { code }),
+      params: undefined,
+      data: undefined,
+    }),
+    overrideOptions(options)
+  );
+};
+
+/** Key is end point string without base url */
+listDictionaryTypeItemsByCode.key = '/dictionaryTypes/{code}/items';
+
+/**
  * 根据ID查询字典分类
  */
 export const loadDictionaryTypeById = (
@@ -620,6 +695,88 @@ export const updateDutyPatch = (
 
 /** Key is end point string without base url */
 updateDutyPatch.key = '/duties/{id}';
+
+/**
+ * 查询全部枚举信息
+ */
+export const enumsAll = (
+  options?: RequestOptions
+): Promise<{ [x: string]: Map_string_object_[] }> => {
+  return defHttp.get(
+    overrideConfigs({
+      url: enumsAll.key,
+      params: undefined,
+      data: undefined,
+    }),
+    overrideOptions(options)
+  );
+};
+
+/** Key is end point string without base url */
+enumsAll.key = '/enums/all';
+
+/**
+ * 查询所有枚举类型信息
+ */
+export const listEnumTypes = (options?: RequestOptions): Promise<string[]> => {
+  return defHttp.get(
+    overrideConfigs({
+      url: listEnumTypes.key,
+      params: undefined,
+      data: undefined,
+    }),
+    overrideOptions(options)
+  );
+};
+
+/** Key is end point string without base url */
+listEnumTypes.key = '/enums/types';
+
+/**
+ * 根据枚举类型查询枚举信息
+ */
+export const listEnumsByType = (
+  /**
+   * 枚举类型代码，逗号分隔
+   */
+  types: undefined,
+  options?: RequestOptions
+): Promise<Map_string_object_[]> => {
+  return defHttp.get(
+    overrideConfigs({
+      url: template(listEnumsByType.key, { types }),
+      params: undefined,
+      data: undefined,
+    }),
+    overrideOptions(options)
+  );
+};
+
+/** Key is end point string without base url */
+listEnumsByType.key = '/enums/types/{types}';
+
+/**
+ * 根据枚举类型查询枚举信息
+ */
+export const listEnumItemsByType = (
+  /**
+   * 枚举类型代码
+   */
+  type: string,
+  options?: RequestOptions
+): Promise<Map_string_object_[]> => {
+  return defHttp.get(
+    overrideConfigs({
+      url: template(listEnumItemsByType.key, { type }),
+      params: undefined,
+      data: undefined,
+    }),
+    overrideOptions(options)
+  );
+};
+
+/** Key is end point string without base url */
+listEnumItemsByType.key = '/enums/{type}/items';
 
 /**
  * 根据条件查询后台接口，支持分页、排序
@@ -950,7 +1107,7 @@ createPermission.key = '/permissions';
  * 根据条件查询权限信息，以树型结构返回
  */
 export const listPermissionsTree = (
-  params: ListPermissionsTreeQueryParams,
+  params?: ListPermissionsTreeQueryParams,
   options?: RequestOptions
 ): Promise<PermissionEntity[]> => {
   return defHttp.get(

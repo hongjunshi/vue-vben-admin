@@ -1,4 +1,5 @@
 export default {
+  examples: 'Examples',
   charts: {
     baiduMap: 'Baidu map',
     aMap: 'A map',

@@ -238,8 +238,7 @@ export function buildRouteFromPermissions(
   );
   return matchedPermissions
     .map((p) => {
-      const { id, name, component, icon, url, redirect, title, sortIndex, additionalInformation } =
-        p;
+      const { id, name, component, icon, url, redirect, title, sortIndex, meta } = p;
       return {
         name,
         component: component?.toUpperCase() === 'PARENTLAYOUT' ? undefined : component,
@@ -248,25 +247,13 @@ export function buildRouteFromPermissions(
         redirect,
         orderNo: sortIndex,
         meta: {
-          title: title,
-          hideMenu: 'true' === additionalInformation?.meta_hideMenu ? true : undefined,
-          hideChildrenInMenu:
-            'true' === additionalInformation?.meta_hideChildrenInMenu ? true : undefined,
-          hideTab: 'true' === additionalInformation?.meta_hideTab ? true : undefined,
-          carryParam: 'true' === additionalInformation?.meta_carryParam ? true : undefined,
-          hidePathForChildren:
-            'true' === additionalInformation?.meta_hidePathForChildren ? true : undefined,
-          ignoreRoute: 'true' === additionalInformation?.meta_ignoreRoute ? true : undefined,
-          ignoreKeepAlive:
-            'true' === additionalInformation?.meta_ignoreKeepAlive ? true : undefined,
-          currentActiveMenu: additionalInformation?.meta_currentActiveMenu,
-          dynamicLevel: additionalInformation?.meta_dynamicLevel,
-          realPath: additionalInformation?.meta_realPath,
+          title,
+          ...(meta ? JSON.parse(meta) : {}),
         },
         children: buildRouteFromPermissions(notMatchedPermissions, id),
       } as AppRouteRecordRaw;
     })
     .sort(function (a, b) {
-      return a.orderNo - b.orderNo;
+      return (a.orderNo ? a.orderNo : 0) - (b.orderNo ? b.orderNo : 0);
     });
 }

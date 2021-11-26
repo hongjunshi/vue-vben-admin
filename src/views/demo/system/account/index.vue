@@ -37,7 +37,7 @@
 <script lang="ts">
   import { defineComponent, reactive } from 'vue';
 
-  import { BasicTable, useTable, TableAction } from '/@/components/Table';
+  import { BasicTable, TableAction, useTable } from '/@/components/Table';
   import { getAccountList } from '/@/api/demo/system';
   import { PageWrapper } from '/@/components/Page';
   import DeptTree from './DeptTree.vue';
@@ -47,6 +47,7 @@
 
   import { columns, searchFormSchema } from './account.data';
   import { useGo } from '/@/hooks/web/usePage';
+  import { RouteLocationRaw } from 'vue-router';
 
   export default defineComponent({
     name: 'AccountManagement',
@@ -115,7 +116,7 @@
       }
 
       function handleView(record: Recordable) {
-        go('/system/account_detail/' + record.id);
+        go({ name: 'AccountDetailDemo', params: { id: record.id } } as RouteLocationRaw);
       }
 
       return {
