@@ -2,7 +2,7 @@ import type { VNodeChild } from 'vue';
 import type { PaginationProps } from './pagination';
 import type { FormProps } from '/@/components/Form';
 import type {
-  ColumnProps,
+  ColumnType,
   TableRowSelection as ITableRowSelection,
 } from 'ant-design-vue/lib/table/interface';
 
@@ -51,6 +51,7 @@ export interface ExpandedRowRenderRecord<T> extends TableCustomRecord<T> {
   indent?: number;
   expanded?: boolean;
 }
+
 export interface ColumnFilterItem {
   text?: string;
   value?: string;
@@ -63,7 +64,7 @@ export interface TableCustomRecord<T = Recordable> {
 }
 
 export interface SorterResult {
-  column: ColumnProps;
+  column: ColumnType;
   order: SortOrder;
   field: string;
   columnKey: string;
@@ -333,7 +334,7 @@ export interface BasicTableProps<T = any> {
    * Set props on per header row
    * @type Function
    */
-  customHeaderRow?: (column: ColumnProps, index: number) => object;
+  customHeaderRow?: (column: ColumnType, index: number) => object;
 
   /**
    * Set props on per row
@@ -410,14 +411,12 @@ export type CellFormat =
   | Map<string | number, any>;
 
 // @ts-ignore
-export interface BasicColumn extends ColumnProps {
+export interface BasicColumn extends ColumnType {
   children?: BasicColumn[];
   filters?: {
     text: string;
     value: string;
-    children?:
-      | unknown[]
-      | (((props: Record<string, unknown>) => unknown[]) & (() => unknown[]) & (() => unknown[]));
+    children?: unknown[] | (((props: Record<string, unknown>) => unknown[]) & (() => unknown[]));
   }[];
 
   //
