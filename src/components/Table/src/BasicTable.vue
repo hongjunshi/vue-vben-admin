@@ -43,7 +43,6 @@
   import { Table } from 'ant-design-vue';
   import { BasicForm, useForm } from '/@/components/Form/index';
   import { PageWrapperFixedHeightKey } from '/@/components/Page';
-  import expandIcon from './components/ExpandIcon';
   import HeaderCell from './components/HeaderCell.vue';
   import { InnerHandlers } from './types/table';
 
@@ -111,7 +110,7 @@
         unref(isFixedHeightPage) &&
           props.canResize &&
           warn(
-            "'canResize' of BasicTable may not work in PageWrapper with 'fixedHeight' (especially in hot updates)",
+            "'canResize' of BasicTable may not work in PageWrapper with 'fixedHeight' (especially in hot updates)"
           );
       });
 
@@ -159,7 +158,7 @@
           getFieldsValue: formActions.getFieldsValue,
           clearSelectedRowKeys,
         },
-        emit,
+        emit
       );
 
       function handleTableChange(...args) {
@@ -184,7 +183,7 @@
         tableElRef,
         getColumnsRef,
         getRowSelectionRef,
-        getDataSourceRef,
+        getDataSourceRef
       );
 
       const { customRow } = useCustomRow(getProps, {
@@ -213,7 +212,7 @@
         getProps,
         getScrollRef,
         tableElRef,
-        getDataSourceRef,
+        getDataSourceRef
       );
 
       const { getFormProps, replaceFormSlotKey, getFormSlotKeys, handleSearchInfoChange } =
@@ -222,10 +221,8 @@
       const getBindValues = computed(() => {
         const dataSource = unref(getDataSourceRef);
         let propsData: Recordable = {
-          // ...(dataSource.length === 0 ? { getPopupContainer: () => document.body } : {}),
           ...attrs,
           customRow,
-          expandIcon: slots.expandIcon ? null : expandIcon(),
           ...unref(getProps),
           ...unref(getHeaderProps),
           scroll: unref(getScrollRef),
