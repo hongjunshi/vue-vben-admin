@@ -1,9 +1,10 @@
-import { isArray, isFunction, isObject, isString, isNullOrUnDef } from '/@/utils/is';
+import { isArray, isFunction, isNullOrUnDef, isObject, isString } from '/@/utils/is';
 import { dateUtil } from '/@/utils/dateUtil';
+import type { ComputedRef, Ref } from 'vue';
 import { unref } from 'vue';
-import type { Ref, ComputedRef } from 'vue';
 import type { FormProps, FormSchema } from '../types/form';
-import { set } from 'lodash-es';
+import { getProperty, setProperty, deleteProperty } from '../helper';
+import { isDayjs } from 'dayjs';
 
 interface UseFormValuesContext {
   defaultValueRef: Ref<any>;
@@ -11,17 +12,14 @@ interface UseFormValuesContext {
   getProps: ComputedRef<FormProps>;
   formModel: Recordable;
 }
+
 export function useFormValues({
   defaultValueRef,
   getSchema,
   formModel,
   getProps,
 }: UseFormValuesContext) {
-  // Processing form values
-  function handleFormValues(values: Recordable) {
-    if (!isObject(values)) {
-      return {};
-    }
+  function transformValues(values: Record<any, any>) {
     const res: Recordable = {};
     for (const item of Object.entries(values)) {
       let [, value] = item;
@@ -31,7 +29,11 @@ export function useFormValues({
       }
       const transformDateFunc = unref(getProps).transformDateFunc;
       if (isObject(value)) {
-        value = transformDateFunc?.(value);
+        if (isDayjs(value)) {
+          value = transformDateFunc?.(value);
+        } else {
+          value = transformValues(value);
+        }
       }
 
       if (isArray(value) && value[0]?.format && value[1]?.format) {
@@ -41,8 +43,17 @@ export function useFormValues({
       if (isString(value)) {
         value = value.trim();
       }
-      set(res, key, value);
+      setProperty(res, key, value);
     }
+    return res;
+  }
+
+  // Processing form values
+  function handleFormValues(values: Recordable) {
+    if (!isObject(values)) {
+      return {};
+    }
+    const res = transformValues(values);
     return handleRangeTimeValue(res);
   }
 
@@ -57,17 +68,15 @@ export function useFormValues({
     }
 
     for (const [field, [startTimeKey, endTimeKey], format = 'YYYY-MM-DD'] of fieldMapToTime) {
-      if (!field || !startTimeKey || !endTimeKey || !values[field]) {
+      const rangeTime = getProperty(values, field);
+      if (!field || !startTimeKey || !endTimeKey || !rangeTime) {
         continue;
       }
-
-      const [startTime, endTime]: string[] = values[field];
-
-      values[startTimeKey] = dateUtil(startTime).format(format);
-      values[endTimeKey] = dateUtil(endTime).format(format);
-      Reflect.deleteProperty(values, field);
+      const [startTime, endTime]: string[] = rangeTime;
+      deleteProperty(values, field);
+      setProperty(values, startTimeKey, dateUtil(startTime).format(format));
+      setProperty(values, endTimeKey, dateUtil(endTime).format(format));
     }
-
     return values;
   }
 
@@ -77,8 +86,8 @@ export function useFormValues({
     schemas.forEach((item) => {
       const { defaultValue } = item;
       if (!isNullOrUnDef(defaultValue)) {
-        obj[item.field] = defaultValue;
-        formModel[item.field] = defaultValue;
+        setProperty(obj, item.field, defaultValue);
+        setProperty(formModel, item.field, defaultValue);
       }
     });
     defaultValueRef.value = obj;

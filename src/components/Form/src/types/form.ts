@@ -1,13 +1,12 @@
 import type { NamePath, RuleObject } from 'ant-design-vue/lib/form/interface';
-import type { VNode } from 'vue';
+import type { CSSProperties, VNode } from 'vue';
 import type { ButtonProps as AntdButtonProps } from '/@/components/Button';
 import type { FormItem } from './formItem';
 import type { ColEx, ComponentType } from './index';
 import type { TableActionType } from '/@/components/Table/src/types/table';
-import type { CSSProperties } from 'vue';
 import type { RowProps } from 'ant-design-vue/lib/grid/Row';
 
-export type FieldMapToTime = [string, [string, string], string?][];
+export type FieldMapToTime = [NamePath, [NamePath, NamePath], string?][];
 
 export type Rule = RuleObject & {
   trigger?: 'blur' | 'change' | ['change', 'blur'];
@@ -17,7 +16,7 @@ export interface RenderCallbackParams {
   schema: FormSchema;
   values: Recordable;
   model: Recordable;
-  field: string;
+  field: NamePath;
 }
 
 export interface ButtonProps extends AntdButtonProps {
@@ -29,14 +28,14 @@ export interface FormActionType {
   setFieldsValue: <T>(values: T) => Promise<void>;
   resetFields: () => Promise<void>;
   getFieldsValue: () => Recordable;
-  clearValidate: (name?: string | string[]) => Promise<void>;
+  clearValidate: (name?: NamePath) => Promise<void>;
   updateSchema: (data: Partial<FormSchema> | Partial<FormSchema>[]) => Promise<void>;
   resetSchema: (data: Partial<FormSchema> | Partial<FormSchema>[]) => Promise<void>;
   setProps: (formProps: Partial<FormProps>) => Promise<void>;
-  removeSchemaByFiled: (field: string | string[]) => Promise<void>;
+  removeSchemaByFiled: (field: NamePath) => Promise<void>;
   appendSchemaByField: (
     schema: FormSchema,
-    prefixField: string | undefined,
+    prefixField: NamePath,
     first?: boolean | undefined
   ) => Promise<void>;
   validateFields: (nameList?: NamePath[]) => Promise<any>;
@@ -121,9 +120,10 @@ export interface FormProps {
   transformDateFunc?: (date: any) => string;
   colon?: boolean;
 }
+
 export interface FormSchema {
   // Field name
-  field: string;
+  field: NamePath;
   // Event name triggered by internal value change, default change
   changeEvent?: string;
   // Variable name bound to v-model Default value
@@ -203,6 +203,7 @@ export interface FormSchema {
 
   dynamicRules?: (renderCallbackParams: RenderCallbackParams) => Rule[];
 }
+
 export interface HelpComponentProps {
   maxWidth: string;
   // Whether to display the serial number
