@@ -183,6 +183,7 @@ export const usePermissionStore = defineStore({
           createMessage.loading({
             content: t('sys.app.menuLoading'),
             duration: 1,
+            type: 'loading',
           });
 
           // !Simulate to obtain permission codes from the background,
@@ -193,7 +194,9 @@ export const usePermissionStore = defineStore({
             const userStore = useUserStore();
             const userInfo = userStore.getUserInfo;
             const { permissions } = userInfo;
-            routeList = buildRouteFromPermissions(permissions as PermissionEntity[]);
+            routeList = buildRouteFromPermissions(
+              permissions.filter((p) => p.type !== 2) as PermissionEntity[]
+            );
           } catch (error) {
             console.error(error);
           }

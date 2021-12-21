@@ -5,12 +5,17 @@
  */
 import { RequestOptions } from '/#/axios';
 import type { AxiosRequestConfig } from 'axios';
-
-const defaultOptions = {
+import qs from 'qs';
+const defaultOptions: RequestOptions = {
   urlPrefix: '/api',
   apiUrl: '/sample',
+  errorMessageMode: 'message',
 };
-const defaultConfigs = {};
+const defaultConfigs: AxiosRequestConfig = {
+  paramsSerializer: function (params) {
+    return qs.stringify(params, { arrayFormat: 'repeat' });
+  },
+};
 export const overrideOptions = function (options?: RequestOptions): RequestOptions {
   return {
     ...defaultOptions,

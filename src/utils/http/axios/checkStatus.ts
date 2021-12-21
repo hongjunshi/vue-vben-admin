@@ -14,7 +14,7 @@ const stp = projectSetting.sessionTimeoutProcessing;
 export function checkStatus(
   status: number,
   msg: string,
-  errorMessageMode: ErrorMessageMode = 'message',
+  errorMessageMode: ErrorMessageMode = 'message'
 ): void {
   const { t } = useI18n();
   const userStore = useUserStoreWithOut();
@@ -50,7 +50,7 @@ export function checkStatus(
       errMessage = t('sys.api.errMsg408');
       break;
     case 500:
-      errMessage = t('sys.api.errMsg500');
+      errMessage = msg || t('sys.api.errMsg500');
       break;
     case 501:
       errMessage = t('sys.api.errMsg501');

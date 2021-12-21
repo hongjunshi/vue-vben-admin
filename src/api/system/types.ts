@@ -33,19 +33,19 @@ export interface Api {
    * 是否删除
    * Format: int32
    */
-  isDelete: '0' | '1';
+  isDelete: 0 | 1;
   /**
    *
    * 是否可用
    * Format: int32
    */
-  isEnable: '1' | '0';
+  isEnable: 1 | 0;
   /**
    *
    * 是否允许所有人访问
    * Format: int32
    */
-  isPermitAll: '1' | '0';
+  isPermitAll: 1 | 0;
   /**
    *
    * 接口名称
@@ -65,6 +65,7 @@ export interface Api {
    */
   deleteTime?: string;
   deleteUser?: User;
+  dependencies?: Api[];
   /**
    *
    * Format: date-time
@@ -106,19 +107,19 @@ export interface ApiEntity {
    * 是否删除
    * Format: int32
    */
-  isDelete: '0' | '1';
+  isDelete: 0 | 1;
   /**
    *
    * 是否可用
    * Format: int32
    */
-  isEnable: '1' | '0';
+  isEnable: 1 | 0;
   /**
    *
    * 是否允许所有人访问
    * Format: int32
    */
-  isPermitAll: '1' | '0';
+  isPermitAll: 1 | 0;
   /**
    *
    * 名称
@@ -150,9 +151,15 @@ export interface ApiEntity {
   deleteUser?: UserEntity;
   /**
    *
+   * 依赖接口
+   */
+  dependencies?: ApiEntity[];
+  /**
+   *
    * 描述
    */
   description?: string;
+  idIfNotProvide?: string;
   /**
    *
    * 最后修改时间
@@ -172,6 +179,90 @@ export interface ApiEntity {
    * Format: int32
    */
   sortIndex?: number;
+}
+
+export interface ApiTreeQueryParams {
+  /**
+   *
+   * 查询条件:后台接口代码，模糊匹配
+   */
+  search_code?: string;
+  /**
+   *
+   * 查询条件:创建日期起，格式yyyy-mm-dd
+   */
+  search_createDateBegin?: string;
+  /**
+   *
+   * 查询条件:创建日期止，格式yyyy-mm-dd
+   */
+  search_createDateEnd?: string;
+  /**
+   *
+   * 查询条件:后台接口描述，模糊匹配
+   */
+  search_description?: string;
+  /**
+   *
+   * 查询条件:是否可用，，1：是，0：否，精确匹配
+   */
+  search_isEnable?: '0' | '1';
+  /**
+   *
+   * 查询条件:后台接口请求方式，模糊匹配
+   */
+  search_method?: string;
+  /**
+   *
+   * 查询条件:后台接口名称，模糊匹配
+   */
+  search_name?: string;
+  /**
+   *
+   * 查询条件:上级后台接口代码，模糊匹配
+   */
+  search_parentCode?: string;
+  /**
+   *
+   * 查询条件:上级后台接口ID，精确匹配
+   */
+  search_parentId?: string;
+  /**
+   *
+   * 查询条件:上级后台接口名称，模糊匹配
+   */
+  search_parentName?: string;
+  /**
+   *
+   * 查询条件:后台接口地址，模糊匹配
+   */
+  search_url?: string;
+}
+
+/**
+* 
+        * ApiTreeResult
+      
+        * 根据参数构造接口树形数据
+*/
+
+export interface ApiTreeResult {
+  /**
+   *
+   * 返回状态码
+   * Format: int32
+   */
+  code?: 200 | 201 | 204 | 400 | 401 | 403 | 404 | 408 | 500 | 503 | 504;
+  /**
+   *
+   * 返回的泛型数据
+   */
+  data?: ApiEntity[];
+  /**
+   *
+   * 返回消息
+   */
+  message?: string;
 }
 
 /**
@@ -203,13 +294,13 @@ export interface Application {
    * 是否删除
    * Format: int32
    */
-  isDelete: '0' | '1';
+  isDelete: 0 | 1;
   /**
    *
    * 是否可用
    * Format: int32
    */
-  isEnable: '1' | '0';
+  isEnable: 1 | 0;
   /**
    *
    * 应用名称
@@ -229,7 +320,12 @@ export interface Application {
   lastModifyTime?: string;
   lastModifyUser?: User;
   reservableValues?: ReservableValues_string_;
-  roles?: Role[];
+  /**
+   *
+   * 排序索引
+   * Format: int32
+   */
+  sortIndex?: number;
 }
 
 /**
@@ -262,13 +358,13 @@ export interface ApplicationEntity {
    * 是否删除
    * Format: int32
    */
-  isDelete: '0' | '1';
+  isDelete: 0 | 1;
   /**
    *
    * 是否可用
    * Format: int32
    */
-  isEnable: '1' | '0';
+  isEnable: 1 | 0;
   /**
    *
    * 名称
@@ -292,6 +388,7 @@ export interface ApplicationEntity {
    * 描述
    */
   description?: string;
+  idIfNotProvide?: string;
   /**
    *
    * 最后修改时间
@@ -301,9 +398,10 @@ export interface ApplicationEntity {
   lastModifyUser?: UserEntity;
   /**
    *
-   * 角色列表
+   * 排序索引
+   * Format: int32
    */
-  roles?: RoleEntity[];
+  sortIndex?: number;
 }
 
 /**
@@ -330,13 +428,13 @@ export interface Attachment {
    * 是否删除
    * Format: int32
    */
-  isDelete: '0' | '1';
+  isDelete: 0 | 1;
   /**
    *
    * 是否可用
    * Format: int32
    */
-  isEnable: '1' | '0';
+  isEnable: 1 | 0;
   additionalInformation?: { [x in string | number]: any };
   correlationId?: string;
   correlationType?: string;
@@ -383,13 +481,13 @@ export interface AuditableEntity {
    * 是否删除
    * Format: int32
    */
-  isDelete: '0' | '1';
+  isDelete: 0 | 1;
   /**
    *
    * 是否可用
    * Format: int32
    */
-  isEnable: '1' | '0';
+  isEnable: 1 | 0;
   /**
    *
    * 预留字段配置的类型
@@ -413,6 +511,7 @@ export interface AuditableEntity {
   doubleName1?: string;
   doubleName2?: string;
   doubleName3?: string;
+  idIfNotProvide?: string;
   /**
    *
    * 最后修改时间
@@ -442,8 +541,30 @@ export interface CreateApiResult {
    * 返回状态码
    * Format: int32
    */
-  code?: '200' | '201' | '204' | '400' | '401' | '403' | '404' | '408' | '500' | '503' | '504';
+  code?: 200 | 201 | 204 | 400 | 401 | 403 | 404 | 408 | 500 | 503 | 504;
   data?: ApiEntity;
+  /**
+   *
+   * 返回消息
+   */
+  message?: string;
+}
+
+/**
+* 
+        * CreateApplicationByIdResult
+      
+        * 创建数据结果
+*/
+
+export interface CreateApplicationByIdResult {
+  /**
+   *
+   * 返回状态码
+   * Format: int32
+   */
+  code?: 200 | 201 | 204 | 400 | 401 | 403 | 404 | 408 | 500 | 503 | 504;
+  data?: ApplicationEntity;
   /**
    *
    * 返回消息
@@ -464,7 +585,7 @@ export interface CreateAttachmentByIdResult {
    * 返回状态码
    * Format: int32
    */
-  code?: '200' | '201' | '204' | '400' | '401' | '403' | '404' | '408' | '500' | '503' | '504';
+  code?: 200 | 201 | 204 | 400 | 401 | 403 | 404 | 408 | 500 | 503 | 504;
   data?: Attachment;
   /**
    *
@@ -486,7 +607,7 @@ export interface CreateDepartmentResult {
    * 返回状态码
    * Format: int32
    */
-  code?: '200' | '201' | '204' | '400' | '401' | '403' | '404' | '408' | '500' | '503' | '504';
+  code?: 200 | 201 | 204 | 400 | 401 | 403 | 404 | 408 | 500 | 503 | 504;
   data?: DepartmentEntity;
   /**
    *
@@ -508,7 +629,7 @@ export interface CreateDictionaryResult {
    * 返回状态码
    * Format: int32
    */
-  code?: '200' | '201' | '204' | '400' | '401' | '403' | '404' | '408' | '500' | '503' | '504';
+  code?: 200 | 201 | 204 | 400 | 401 | 403 | 404 | 408 | 500 | 503 | 504;
   data?: DictionaryEntity;
   /**
    *
@@ -530,7 +651,7 @@ export interface CreateDictionaryTypeResult {
    * 返回状态码
    * Format: int32
    */
-  code?: '200' | '201' | '204' | '400' | '401' | '403' | '404' | '408' | '500' | '503' | '504';
+  code?: 200 | 201 | 204 | 400 | 401 | 403 | 404 | 408 | 500 | 503 | 504;
   data?: DictionaryTypeEntity;
   /**
    *
@@ -552,7 +673,7 @@ export interface CreateDutyResult {
    * 返回状态码
    * Format: int32
    */
-  code?: '200' | '201' | '204' | '400' | '401' | '403' | '404' | '408' | '500' | '503' | '504';
+  code?: 200 | 201 | 204 | 400 | 401 | 403 | 404 | 408 | 500 | 503 | 504;
   data?: DutyEntity;
   /**
    *
@@ -574,7 +695,7 @@ export interface CreateOrganizationResult {
    * 返回状态码
    * Format: int32
    */
-  code?: '200' | '201' | '204' | '400' | '401' | '403' | '404' | '408' | '500' | '503' | '504';
+  code?: 200 | 201 | 204 | 400 | 401 | 403 | 404 | 408 | 500 | 503 | 504;
   data?: OrganizationEntity;
   /**
    *
@@ -596,7 +717,7 @@ export interface CreatePermissionResult {
    * 返回状态码
    * Format: int32
    */
-  code?: '200' | '201' | '204' | '400' | '401' | '403' | '404' | '408' | '500' | '503' | '504';
+  code?: 200 | 201 | 204 | 400 | 401 | 403 | 404 | 408 | 500 | 503 | 504;
   data?: PermissionEntity;
   /**
    *
@@ -618,8 +739,30 @@ export interface CreateReservableConfigResult {
    * 返回状态码
    * Format: int32
    */
-  code?: '200' | '201' | '204' | '400' | '401' | '403' | '404' | '408' | '500' | '503' | '504';
+  code?: 200 | 201 | 204 | 400 | 401 | 403 | 404 | 408 | 500 | 503 | 504;
   data?: AuditableEntity;
+  /**
+   *
+   * 返回消息
+   */
+  message?: string;
+}
+
+/**
+* 
+        * CreateResourceByIdResult
+      
+        * 创建数据结果
+*/
+
+export interface CreateResourceByIdResult {
+  /**
+   *
+   * 返回状态码
+   * Format: int32
+   */
+  code?: 200 | 201 | 204 | 400 | 401 | 403 | 404 | 408 | 500 | 503 | 504;
+  data?: ResourceEntity;
   /**
    *
    * 返回消息
@@ -640,7 +783,7 @@ export interface CreateRoleResult {
    * 返回状态码
    * Format: int32
    */
-  code?: '200' | '201' | '204' | '400' | '401' | '403' | '404' | '408' | '500' | '503' | '504';
+  code?: 200 | 201 | 204 | 400 | 401 | 403 | 404 | 408 | 500 | 503 | 504;
   data?: RoleEntity;
   /**
    *
@@ -662,7 +805,7 @@ export interface CreateUserResult {
    * 返回状态码
    * Format: int32
    */
-  code?: '200' | '201' | '204' | '400' | '401' | '403' | '404' | '408' | '500' | '503' | '504';
+  code?: 200 | 201 | 204 | 400 | 401 | 403 | 404 | 408 | 500 | 503 | 504;
   data?: UserEntity;
   /**
    *
@@ -684,7 +827,7 @@ export interface DataRestResult_ApiEntity_ {
    * 返回状态码
    * Format: int32
    */
-  code?: '200' | '201' | '204' | '400' | '401' | '403' | '404' | '408' | '500' | '503' | '504';
+  code?: 200 | 201 | 204 | 400 | 401 | 403 | 404 | 408 | 500 | 503 | 504;
   data?: ApiEntity;
   /**
    *
@@ -706,8 +849,52 @@ export interface DataRestResult_Api_ {
    * 返回状态码
    * Format: int32
    */
-  code?: '200' | '201' | '204' | '400' | '401' | '403' | '404' | '408' | '500' | '503' | '504';
+  code?: 200 | 201 | 204 | 400 | 401 | 403 | 404 | 408 | 500 | 503 | 504;
   data?: Api;
+  /**
+   *
+   * 返回消息
+   */
+  message?: string;
+}
+
+/**
+* 
+        * DataRestResult«ApplicationEntity»
+      
+        * 带数据的返回结果
+*/
+
+export interface DataRestResult_ApplicationEntity_ {
+  /**
+   *
+   * 返回状态码
+   * Format: int32
+   */
+  code?: 200 | 201 | 204 | 400 | 401 | 403 | 404 | 408 | 500 | 503 | 504;
+  data?: ApplicationEntity;
+  /**
+   *
+   * 返回消息
+   */
+  message?: string;
+}
+
+/**
+* 
+        * DataRestResult«Application»
+      
+        * 带数据的返回结果
+*/
+
+export interface DataRestResult_Application_ {
+  /**
+   *
+   * 返回状态码
+   * Format: int32
+   */
+  code?: 200 | 201 | 204 | 400 | 401 | 403 | 404 | 408 | 500 | 503 | 504;
+  data?: Application;
   /**
    *
    * 返回消息
@@ -728,7 +915,7 @@ export interface DataRestResult_Attachment_ {
    * 返回状态码
    * Format: int32
    */
-  code?: '200' | '201' | '204' | '400' | '401' | '403' | '404' | '408' | '500' | '503' | '504';
+  code?: 200 | 201 | 204 | 400 | 401 | 403 | 404 | 408 | 500 | 503 | 504;
   data?: Attachment;
   /**
    *
@@ -750,7 +937,7 @@ export interface DataRestResult_AuditableEntity_ {
    * 返回状态码
    * Format: int32
    */
-  code?: '200' | '201' | '204' | '400' | '401' | '403' | '404' | '408' | '500' | '503' | '504';
+  code?: 200 | 201 | 204 | 400 | 401 | 403 | 404 | 408 | 500 | 503 | 504;
   data?: AuditableEntity;
   /**
    *
@@ -772,7 +959,7 @@ export interface DataRestResult_DepartmentEntity_ {
    * 返回状态码
    * Format: int32
    */
-  code?: '200' | '201' | '204' | '400' | '401' | '403' | '404' | '408' | '500' | '503' | '504';
+  code?: 200 | 201 | 204 | 400 | 401 | 403 | 404 | 408 | 500 | 503 | 504;
   data?: DepartmentEntity;
   /**
    *
@@ -794,7 +981,7 @@ export interface DataRestResult_Department_ {
    * 返回状态码
    * Format: int32
    */
-  code?: '200' | '201' | '204' | '400' | '401' | '403' | '404' | '408' | '500' | '503' | '504';
+  code?: 200 | 201 | 204 | 400 | 401 | 403 | 404 | 408 | 500 | 503 | 504;
   data?: Department;
   /**
    *
@@ -816,7 +1003,7 @@ export interface DataRestResult_DictionaryEntity_ {
    * 返回状态码
    * Format: int32
    */
-  code?: '200' | '201' | '204' | '400' | '401' | '403' | '404' | '408' | '500' | '503' | '504';
+  code?: 200 | 201 | 204 | 400 | 401 | 403 | 404 | 408 | 500 | 503 | 504;
   data?: DictionaryEntity;
   /**
    *
@@ -838,7 +1025,7 @@ export interface DataRestResult_DictionaryTypeEntity_ {
    * 返回状态码
    * Format: int32
    */
-  code?: '200' | '201' | '204' | '400' | '401' | '403' | '404' | '408' | '500' | '503' | '504';
+  code?: 200 | 201 | 204 | 400 | 401 | 403 | 404 | 408 | 500 | 503 | 504;
   data?: DictionaryTypeEntity;
   /**
    *
@@ -860,7 +1047,7 @@ export interface DataRestResult_DictionaryType_ {
    * 返回状态码
    * Format: int32
    */
-  code?: '200' | '201' | '204' | '400' | '401' | '403' | '404' | '408' | '500' | '503' | '504';
+  code?: 200 | 201 | 204 | 400 | 401 | 403 | 404 | 408 | 500 | 503 | 504;
   data?: DictionaryType;
   /**
    *
@@ -882,7 +1069,7 @@ export interface DataRestResult_Dictionary_ {
    * 返回状态码
    * Format: int32
    */
-  code?: '200' | '201' | '204' | '400' | '401' | '403' | '404' | '408' | '500' | '503' | '504';
+  code?: 200 | 201 | 204 | 400 | 401 | 403 | 404 | 408 | 500 | 503 | 504;
   data?: Dictionary;
   /**
    *
@@ -904,7 +1091,7 @@ export interface DataRestResult_DutyEntity_ {
    * 返回状态码
    * Format: int32
    */
-  code?: '200' | '201' | '204' | '400' | '401' | '403' | '404' | '408' | '500' | '503' | '504';
+  code?: 200 | 201 | 204 | 400 | 401 | 403 | 404 | 408 | 500 | 503 | 504;
   data?: DutyEntity;
   /**
    *
@@ -926,8 +1113,60 @@ export interface DataRestResult_Duty_ {
    * 返回状态码
    * Format: int32
    */
-  code?: '200' | '201' | '204' | '400' | '401' | '403' | '404' | '408' | '500' | '503' | '504';
+  code?: 200 | 201 | 204 | 400 | 401 | 403 | 404 | 408 | 500 | 503 | 504;
   data?: Duty;
+  /**
+   *
+   * 返回消息
+   */
+  message?: string;
+}
+
+/**
+* 
+        * DataRestResult«List«Api»»
+      
+        * 带数据的返回结果
+*/
+
+export interface DataRestResult_List_Api_ {
+  /**
+   *
+   * 返回状态码
+   * Format: int32
+   */
+  code?: 200 | 201 | 204 | 400 | 401 | 403 | 404 | 408 | 500 | 503 | 504;
+  /**
+   *
+   * 返回的泛型数据
+   */
+  data?: Api[];
+  /**
+   *
+   * 返回消息
+   */
+  message?: string;
+}
+
+/**
+* 
+        * DataRestResult«List«Application»»
+      
+        * 带数据的返回结果
+*/
+
+export interface DataRestResult_List_Application_ {
+  /**
+   *
+   * 返回状态码
+   * Format: int32
+   */
+  code?: 200 | 201 | 204 | 400 | 401 | 403 | 404 | 408 | 500 | 503 | 504;
+  /**
+   *
+   * 返回的泛型数据
+   */
+  data?: Application[];
   /**
    *
    * 返回消息
@@ -948,7 +1187,7 @@ export interface DataRestResult_List_Department_ {
    * 返回状态码
    * Format: int32
    */
-  code?: '200' | '201' | '204' | '400' | '401' | '403' | '404' | '408' | '500' | '503' | '504';
+  code?: 200 | 201 | 204 | 400 | 401 | 403 | 404 | 408 | 500 | 503 | 504;
   /**
    *
    * 返回的泛型数据
@@ -974,7 +1213,7 @@ export interface DataRestResult_List_DictionaryType_ {
    * 返回状态码
    * Format: int32
    */
-  code?: '200' | '201' | '204' | '400' | '401' | '403' | '404' | '408' | '500' | '503' | '504';
+  code?: 200 | 201 | 204 | 400 | 401 | 403 | 404 | 408 | 500 | 503 | 504;
   /**
    *
    * 返回的泛型数据
@@ -1000,7 +1239,7 @@ export interface DataRestResult_List_Dictionary_ {
    * 返回状态码
    * Format: int32
    */
-  code?: '200' | '201' | '204' | '400' | '401' | '403' | '404' | '408' | '500' | '503' | '504';
+  code?: 200 | 201 | 204 | 400 | 401 | 403 | 404 | 408 | 500 | 503 | 504;
   /**
    *
    * 返回的泛型数据
@@ -1026,7 +1265,7 @@ export interface DataRestResult_List_Map_string_object_ {
    * 返回状态码
    * Format: int32
    */
-  code?: '200' | '201' | '204' | '400' | '401' | '403' | '404' | '408' | '500' | '503' | '504';
+  code?: 200 | 201 | 204 | 400 | 401 | 403 | 404 | 408 | 500 | 503 | 504;
   /**
    *
    * 返回的泛型数据
@@ -1052,7 +1291,7 @@ export interface DataRestResult_List_Organization_ {
    * 返回状态码
    * Format: int32
    */
-  code?: '200' | '201' | '204' | '400' | '401' | '403' | '404' | '408' | '500' | '503' | '504';
+  code?: 200 | 201 | 204 | 400 | 401 | 403 | 404 | 408 | 500 | 503 | 504;
   /**
    *
    * 返回的泛型数据
@@ -1078,12 +1317,64 @@ export interface DataRestResult_List_Permission_ {
    * 返回状态码
    * Format: int32
    */
-  code?: '200' | '201' | '204' | '400' | '401' | '403' | '404' | '408' | '500' | '503' | '504';
+  code?: 200 | 201 | 204 | 400 | 401 | 403 | 404 | 408 | 500 | 503 | 504;
   /**
    *
    * 返回的泛型数据
    */
   data?: Permission[];
+  /**
+   *
+   * 返回消息
+   */
+  message?: string;
+}
+
+/**
+* 
+        * DataRestResult«List«ResourceEntity»»
+      
+        * 带数据的返回结果
+*/
+
+export interface DataRestResult_List_ResourceEntity_ {
+  /**
+   *
+   * 返回状态码
+   * Format: int32
+   */
+  code?: 200 | 201 | 204 | 400 | 401 | 403 | 404 | 408 | 500 | 503 | 504;
+  /**
+   *
+   * 返回的泛型数据
+   */
+  data?: ResourceEntity[];
+  /**
+   *
+   * 返回消息
+   */
+  message?: string;
+}
+
+/**
+* 
+        * DataRestResult«List«Role»»
+      
+        * 带数据的返回结果
+*/
+
+export interface DataRestResult_List_Role_ {
+  /**
+   *
+   * 返回状态码
+   * Format: int32
+   */
+  code?: 200 | 201 | 204 | 400 | 401 | 403 | 404 | 408 | 500 | 503 | 504;
+  /**
+   *
+   * 返回的泛型数据
+   */
+  data?: Role[];
   /**
    *
    * 返回消息
@@ -1104,7 +1395,7 @@ export interface DataRestResult_List_string_ {
    * 返回状态码
    * Format: int32
    */
-  code?: '200' | '201' | '204' | '400' | '401' | '403' | '404' | '408' | '500' | '503' | '504';
+  code?: 200 | 201 | 204 | 400 | 401 | 403 | 404 | 408 | 500 | 503 | 504;
   /**
    *
    * 返回的泛型数据
@@ -1130,7 +1421,7 @@ export interface DataRestResult_Map_string_List_Map_string_object_ {
    * 返回状态码
    * Format: int32
    */
-  code?: '200' | '201' | '204' | '400' | '401' | '403' | '404' | '408' | '500' | '503' | '504';
+  code?: 200 | 201 | 204 | 400 | 401 | 403 | 404 | 408 | 500 | 503 | 504;
   /**
    *
    * 返回的泛型数据
@@ -1156,7 +1447,7 @@ export interface DataRestResult_OrganizationEntity_ {
    * 返回状态码
    * Format: int32
    */
-  code?: '200' | '201' | '204' | '400' | '401' | '403' | '404' | '408' | '500' | '503' | '504';
+  code?: 200 | 201 | 204 | 400 | 401 | 403 | 404 | 408 | 500 | 503 | 504;
   data?: OrganizationEntity;
   /**
    *
@@ -1178,7 +1469,7 @@ export interface DataRestResult_Organization_ {
    * 返回状态码
    * Format: int32
    */
-  code?: '200' | '201' | '204' | '400' | '401' | '403' | '404' | '408' | '500' | '503' | '504';
+  code?: 200 | 201 | 204 | 400 | 401 | 403 | 404 | 408 | 500 | 503 | 504;
   data?: Organization;
   /**
    *
@@ -1200,8 +1491,30 @@ export interface DataRestResult_Page_Api_ {
    * 返回状态码
    * Format: int32
    */
-  code?: '200' | '201' | '204' | '400' | '401' | '403' | '404' | '408' | '500' | '503' | '504';
+  code?: 200 | 201 | 204 | 400 | 401 | 403 | 404 | 408 | 500 | 503 | 504;
   data?: Page_Api_;
+  /**
+   *
+   * 返回消息
+   */
+  message?: string;
+}
+
+/**
+* 
+        * DataRestResult«Page«Application»»
+      
+        * 带数据的返回结果
+*/
+
+export interface DataRestResult_Page_Application_ {
+  /**
+   *
+   * 返回状态码
+   * Format: int32
+   */
+  code?: 200 | 201 | 204 | 400 | 401 | 403 | 404 | 408 | 500 | 503 | 504;
+  data?: Page_Application_;
   /**
    *
    * 返回消息
@@ -1222,7 +1535,7 @@ export interface DataRestResult_Page_Department_ {
    * 返回状态码
    * Format: int32
    */
-  code?: '200' | '201' | '204' | '400' | '401' | '403' | '404' | '408' | '500' | '503' | '504';
+  code?: 200 | 201 | 204 | 400 | 401 | 403 | 404 | 408 | 500 | 503 | 504;
   data?: Page_Department_;
   /**
    *
@@ -1244,7 +1557,7 @@ export interface DataRestResult_Page_DictionaryType_ {
    * 返回状态码
    * Format: int32
    */
-  code?: '200' | '201' | '204' | '400' | '401' | '403' | '404' | '408' | '500' | '503' | '504';
+  code?: 200 | 201 | 204 | 400 | 401 | 403 | 404 | 408 | 500 | 503 | 504;
   data?: Page_DictionaryType_;
   /**
    *
@@ -1266,7 +1579,7 @@ export interface DataRestResult_Page_Dictionary_ {
    * 返回状态码
    * Format: int32
    */
-  code?: '200' | '201' | '204' | '400' | '401' | '403' | '404' | '408' | '500' | '503' | '504';
+  code?: 200 | 201 | 204 | 400 | 401 | 403 | 404 | 408 | 500 | 503 | 504;
   data?: Page_Dictionary_;
   /**
    *
@@ -1288,7 +1601,7 @@ export interface DataRestResult_Page_Duty_ {
    * 返回状态码
    * Format: int32
    */
-  code?: '200' | '201' | '204' | '400' | '401' | '403' | '404' | '408' | '500' | '503' | '504';
+  code?: 200 | 201 | 204 | 400 | 401 | 403 | 404 | 408 | 500 | 503 | 504;
   data?: Page_Duty_;
   /**
    *
@@ -1310,7 +1623,7 @@ export interface DataRestResult_Page_Organization_ {
    * 返回状态码
    * Format: int32
    */
-  code?: '200' | '201' | '204' | '400' | '401' | '403' | '404' | '408' | '500' | '503' | '504';
+  code?: 200 | 201 | 204 | 400 | 401 | 403 | 404 | 408 | 500 | 503 | 504;
   data?: Page_Organization_;
   /**
    *
@@ -1332,7 +1645,7 @@ export interface DataRestResult_Page_Permission_ {
    * 返回状态码
    * Format: int32
    */
-  code?: '200' | '201' | '204' | '400' | '401' | '403' | '404' | '408' | '500' | '503' | '504';
+  code?: 200 | 201 | 204 | 400 | 401 | 403 | 404 | 408 | 500 | 503 | 504;
   data?: Page_Permission_;
   /**
    *
@@ -1354,8 +1667,30 @@ export interface DataRestResult_Page_ReservableConfig_ {
    * 返回状态码
    * Format: int32
    */
-  code?: '200' | '201' | '204' | '400' | '401' | '403' | '404' | '408' | '500' | '503' | '504';
+  code?: 200 | 201 | 204 | 400 | 401 | 403 | 404 | 408 | 500 | 503 | 504;
   data?: Page_ReservableConfig_;
+  /**
+   *
+   * 返回消息
+   */
+  message?: string;
+}
+
+/**
+* 
+        * DataRestResult«Page«Resource»»
+      
+        * 带数据的返回结果
+*/
+
+export interface DataRestResult_Page_Resource_ {
+  /**
+   *
+   * 返回状态码
+   * Format: int32
+   */
+  code?: 200 | 201 | 204 | 400 | 401 | 403 | 404 | 408 | 500 | 503 | 504;
+  data?: Page_Resource_;
   /**
    *
    * 返回消息
@@ -1376,7 +1711,7 @@ export interface DataRestResult_Page_Role_ {
    * 返回状态码
    * Format: int32
    */
-  code?: '200' | '201' | '204' | '400' | '401' | '403' | '404' | '408' | '500' | '503' | '504';
+  code?: 200 | 201 | 204 | 400 | 401 | 403 | 404 | 408 | 500 | 503 | 504;
   data?: Page_Role_;
   /**
    *
@@ -1398,7 +1733,7 @@ export interface DataRestResult_Page_User_ {
    * 返回状态码
    * Format: int32
    */
-  code?: '200' | '201' | '204' | '400' | '401' | '403' | '404' | '408' | '500' | '503' | '504';
+  code?: 200 | 201 | 204 | 400 | 401 | 403 | 404 | 408 | 500 | 503 | 504;
   data?: Page_User_;
   /**
    *
@@ -1420,7 +1755,7 @@ export interface DataRestResult_PermissionEntity_ {
    * 返回状态码
    * Format: int32
    */
-  code?: '200' | '201' | '204' | '400' | '401' | '403' | '404' | '408' | '500' | '503' | '504';
+  code?: 200 | 201 | 204 | 400 | 401 | 403 | 404 | 408 | 500 | 503 | 504;
   data?: PermissionEntity;
   /**
    *
@@ -1442,7 +1777,7 @@ export interface DataRestResult_Permission_ {
    * 返回状态码
    * Format: int32
    */
-  code?: '200' | '201' | '204' | '400' | '401' | '403' | '404' | '408' | '500' | '503' | '504';
+  code?: 200 | 201 | 204 | 400 | 401 | 403 | 404 | 408 | 500 | 503 | 504;
   data?: Permission;
   /**
    *
@@ -1464,7 +1799,7 @@ export interface DataRestResult_Principal_ {
    * 返回状态码
    * Format: int32
    */
-  code?: '200' | '201' | '204' | '400' | '401' | '403' | '404' | '408' | '500' | '503' | '504';
+  code?: 200 | 201 | 204 | 400 | 401 | 403 | 404 | 408 | 500 | 503 | 504;
   data?: Principal;
   /**
    *
@@ -1486,8 +1821,52 @@ export interface DataRestResult_ReservableConfig_ {
    * 返回状态码
    * Format: int32
    */
-  code?: '200' | '201' | '204' | '400' | '401' | '403' | '404' | '408' | '500' | '503' | '504';
+  code?: 200 | 201 | 204 | 400 | 401 | 403 | 404 | 408 | 500 | 503 | 504;
   data?: ReservableConfig;
+  /**
+   *
+   * 返回消息
+   */
+  message?: string;
+}
+
+/**
+* 
+        * DataRestResult«ResourceEntity»
+      
+        * 带数据的返回结果
+*/
+
+export interface DataRestResult_ResourceEntity_ {
+  /**
+   *
+   * 返回状态码
+   * Format: int32
+   */
+  code?: 200 | 201 | 204 | 400 | 401 | 403 | 404 | 408 | 500 | 503 | 504;
+  data?: ResourceEntity;
+  /**
+   *
+   * 返回消息
+   */
+  message?: string;
+}
+
+/**
+* 
+        * DataRestResult«Resource»
+      
+        * 带数据的返回结果
+*/
+
+export interface DataRestResult_Resource_ {
+  /**
+   *
+   * 返回状态码
+   * Format: int32
+   */
+  code?: 200 | 201 | 204 | 400 | 401 | 403 | 404 | 408 | 500 | 503 | 504;
+  data?: Resource;
   /**
    *
    * 返回消息
@@ -1508,7 +1887,7 @@ export interface DataRestResult_RoleEntity_ {
    * 返回状态码
    * Format: int32
    */
-  code?: '200' | '201' | '204' | '400' | '401' | '403' | '404' | '408' | '500' | '503' | '504';
+  code?: 200 | 201 | 204 | 400 | 401 | 403 | 404 | 408 | 500 | 503 | 504;
   data?: RoleEntity;
   /**
    *
@@ -1530,7 +1909,7 @@ export interface DataRestResult_Role_ {
    * 返回状态码
    * Format: int32
    */
-  code?: '200' | '201' | '204' | '400' | '401' | '403' | '404' | '408' | '500' | '503' | '504';
+  code?: 200 | 201 | 204 | 400 | 401 | 403 | 404 | 408 | 500 | 503 | 504;
   data?: Role;
   /**
    *
@@ -1552,7 +1931,7 @@ export interface DataRestResult_UserEntity_ {
    * 返回状态码
    * Format: int32
    */
-  code?: '200' | '201' | '204' | '400' | '401' | '403' | '404' | '408' | '500' | '503' | '504';
+  code?: 200 | 201 | 204 | 400 | 401 | 403 | 404 | 408 | 500 | 503 | 504;
   data?: UserEntity;
   /**
    *
@@ -1574,7 +1953,7 @@ export interface DataRestResult_User_ {
    * 返回状态码
    * Format: int32
    */
-  code?: '200' | '201' | '204' | '400' | '401' | '403' | '404' | '408' | '500' | '503' | '504';
+  code?: 200 | 201 | 204 | 400 | 401 | 403 | 404 | 408 | 500 | 503 | 504;
   data?: User;
   /**
    *
@@ -1612,13 +1991,13 @@ export interface Department {
    * 是否删除
    * Format: int32
    */
-  isDelete: '0' | '1';
+  isDelete: 0 | 1;
   /**
    *
    * 是否可用
    * Format: int32
    */
-  isEnable: '1' | '0';
+  isEnable: 1 | 0;
   /**
    *
    * 部门名称
@@ -1626,6 +2005,7 @@ export interface Department {
   name: string;
   organization: Organization;
   additionalInformation?: { [x in string | number]: any };
+  children?: Department[];
   /**
    *
    * Format: date-time
@@ -1673,13 +2053,13 @@ export interface DepartmentEntity {
    * 是否删除
    * Format: int32
    */
-  isDelete: '0' | '1';
+  isDelete: 0 | 1;
   /**
    *
    * 是否可用
    * Format: int32
    */
-  isEnable: '1' | '0';
+  isEnable: 1 | 0;
   /**
    *
    * 部门名称
@@ -1709,6 +2089,7 @@ export interface DepartmentEntity {
    * 部门描述
    */
   description?: string;
+  idIfNotProvide?: string;
   /**
    *
    * 最后修改时间
@@ -1738,7 +2119,7 @@ export interface DepartmentTreeResult {
    * 返回状态码
    * Format: int32
    */
-  code?: '200' | '201' | '204' | '400' | '401' | '403' | '404' | '408' | '500' | '503' | '504';
+  code?: 200 | 201 | 204 | 400 | 401 | 403 | 404 | 408 | 500 | 503 | 504;
   /**
    *
    * 返回的泛型数据
@@ -1757,6 +2138,11 @@ export interface DepartmentsTreeQueryParams {
    * 查询条件:部门名称，精确匹配
    */
   search_name?: string;
+  /**
+   *
+   * 查询条件:组织机构id，精确匹配
+   */
+  search_organizationId?: string;
 }
 
 /**
@@ -1776,7 +2162,7 @@ export interface Dictionary {
    * 是否系统预置
    * Format: int32
    */
-  isSystem: '1' | '0';
+  isSystem: 1 | 0;
   /**
    *
    * 字典类型代码
@@ -1817,19 +2203,19 @@ export interface DictionaryEntity {
    * 是否删除
    * Format: int32
    */
-  isDelete: '0' | '1';
+  isDelete: 0 | 1;
   /**
    *
    * 是否可用
    * Format: int32
    */
-  isEnable: '1' | '0';
+  isEnable: 1 | 0;
   /**
    *
    * 是否是系统预置
    * Format: int32
    */
-  isSystem: '1' | '0';
+  isSystem: 1 | 0;
   /**
    *
    * 字典名称
@@ -1857,6 +2243,7 @@ export interface DictionaryEntity {
    * 描述
    */
   description?: string;
+  idIfNotProvide?: string;
   /**
    *
    * 最后修改时间
@@ -1889,7 +2276,7 @@ export interface DictionaryType {
    * 是否系统预置
    * Format: int32
    */
-  isSystem: '1' | '0';
+  isSystem: 1 | 0;
   additionalInformation?: { [x in string | number]: any };
   code?: string;
   items?: Dictionary[];
@@ -1921,19 +2308,19 @@ export interface DictionaryTypeEntity {
    * 是否删除
    * Format: int32
    */
-  isDelete: '0' | '1';
+  isDelete: 0 | 1;
   /**
    *
    * 是否可用
    * Format: int32
    */
-  isEnable: '1' | '0';
+  isEnable: 1 | 0;
   /**
    *
    * 是否是系统预置
    * Format: int32
    */
-  isSystem: '1' | '0';
+  isSystem: 1 | 0;
   /**
    *
    * 字典类型名称
@@ -1999,13 +2386,13 @@ export interface Duty {
    * 是否删除
    * Format: int32
    */
-  isDelete: '0' | '1';
+  isDelete: 0 | 1;
   /**
    *
    * 是否可用
    * Format: int32
    */
-  isEnable: '1' | '0';
+  isEnable: 1 | 0;
   level: Dictionary;
   /**
    *
@@ -2058,19 +2445,19 @@ export interface DutyEntity {
    * 是否删除
    * Format: int32
    */
-  isDelete: '0' | '1';
+  isDelete: 0 | 1;
   /**
    *
    * 是否可用
    * Format: int32
    */
-  isEnable: '1' | '0';
+  isEnable: 1 | 0;
   /**
    *
    * 是否是系统预置
    * Format: int32
    */
-  isSystem: '1' | '0';
+  isSystem: 1 | 0;
   level: DictionaryEntity;
   /**
    *
@@ -2095,6 +2482,7 @@ export interface DutyEntity {
    * 描述
    */
   description?: string;
+  idIfNotProvide?: string;
   /**
    *
    * 最后修改时间
@@ -2123,7 +2511,7 @@ export interface EnumsAllResult {
    * 返回状态码
    * Format: int32
    */
-  code?: '200' | '201' | '204' | '400' | '401' | '403' | '404' | '408' | '500' | '503' | '504';
+  code?: 200 | 201 | 204 | 400 | 401 | 403 | 404 | 408 | 500 | 503 | 504;
   /**
    *
    * 返回的泛型数据
@@ -2149,7 +2537,7 @@ export interface ErrorRestResult {
    * 返回状态码
    * Format: int32
    */
-  code?: '200' | '201' | '204' | '400' | '401' | '403' | '404' | '408' | '500' | '503' | '504';
+  code?: 200 | 201 | 204 | 400 | 401 | 403 | 404 | 408 | 500 | 503 | 504;
   /**
    *
    * 错误代码
@@ -2178,6 +2566,188 @@ export interface GrantedAuthority {
   authority?: string;
 }
 
+export interface ListAllApplicationsQueryParams {
+  /**
+   *
+   * 查询条件:应用代码，精准匹配
+   */
+  search_code?: string;
+  /**
+   *
+   * 查询条件:应用名称，模糊匹配
+   */
+  search_name?: string;
+}
+
+/**
+* 
+        * ListAllApplicationsResult
+      
+        * 根据参数查询全部数据结果
+*/
+
+export interface ListAllApplicationsResult {
+  /**
+   *
+   * 返回状态码
+   * Format: int32
+   */
+  code?: 200 | 201 | 204 | 400 | 401 | 403 | 404 | 408 | 500 | 503 | 504;
+  /**
+   *
+   * 返回的泛型数据
+   */
+  data?: ApplicationEntity[];
+  /**
+   *
+   * 返回消息
+   */
+  message?: string;
+}
+
+export interface ListAllResourcesQueryParams {
+  /**
+   *
+   * 查询条件:资源代码，等于
+   */
+  search_code?: string;
+  /**
+   *
+   * 查询条件:资源描述，等于
+   */
+  search_description?: string;
+  /**
+   *
+   * 查询条件:资源名称，模糊匹配
+   */
+  search_name?: string;
+  /**
+   *
+   * 查询条件:资源ID，等于
+   */
+  search_service?: string;
+  /**
+   *
+   * 查询条件:排序索引，等于
+   */
+  search_sortIndex?: string;
+  /**
+   *
+   * 查询条件:资源类型，1：Spring Cloud资源，2：HTTP资源，等于
+   */
+  search_type?: string;
+  /**
+   *
+   * 查询条件:URL地址，等于
+   */
+  search_url?: string;
+}
+
+/**
+* 
+        * ListAllResourcesResult
+      
+        * 根据参数查询全部数据结果
+*/
+
+export interface ListAllResourcesResult {
+  /**
+   *
+   * 返回状态码
+   * Format: int32
+   */
+  code?: 200 | 201 | 204 | 400 | 401 | 403 | 404 | 408 | 500 | 503 | 504;
+  /**
+   *
+   * 返回的泛型数据
+   */
+  data?: ResourceEntity[];
+  /**
+   *
+   * 返回消息
+   */
+  message?: string;
+}
+
+/**
+* 
+        * ListAllRoleResult
+      
+        * 根据参数查询角色数据结果
+*/
+
+export interface ListAllRoleResult {
+  /**
+   *
+   * 返回状态码
+   * Format: int32
+   */
+  code?: 200 | 201 | 204 | 400 | 401 | 403 | 404 | 408 | 500 | 503 | 504;
+  /**
+   *
+   * 返回的泛型数据
+   */
+  data?: RoleEntity[];
+  /**
+   *
+   * 返回消息
+   */
+  message?: string;
+}
+
+export interface ListAllRolesQueryParams {
+  /**
+   *
+   * 查询条件:应用id，精准匹配
+   */
+  search_applicationId?: string;
+  /**
+   *
+   * 查询条件:角色代码，模糊匹配
+   */
+  search_code?: string;
+  /**
+   *
+   * 查询条件:创建日期起，格式yyyy-mm-dd
+   */
+  search_createDateBegin?: string;
+  /**
+   *
+   * 查询条件:创建日期止，格式yyyy-mm-dd
+   */
+  search_createDateEnd?: string;
+  /**
+   *
+   * 查询条件:角色描述，模糊匹配
+   */
+  search_description?: string;
+  /**
+   *
+   * 查询条件:是否可用，，1：是，0：否，精确匹配
+   */
+  search_isEnable?: '0' | '1';
+  /**
+   *
+   * 查询条件:是否系统角色，1：是，0：否，精确匹配
+   */
+  search_isSystem?: '0' | '1';
+  /**
+   *
+   * 查询条件:角色级别，对应角色字典，精确匹配
+   */
+  search_level?: string;
+  /**
+   *
+   * 查询条件:角色级别名称，模糊匹配
+   */
+  search_levelName?: string;
+  /**
+   *
+   * 查询条件:角色名称，模糊匹配
+   */
+  search_name?: string;
+}
+
 /**
 * 
         * ListApiResult
@@ -2191,7 +2761,7 @@ export interface ListApiResult {
    * 返回状态码
    * Format: int32
    */
-  code?: '200' | '201' | '204' | '400' | '401' | '403' | '404' | '408' | '500' | '503' | '504';
+  code?: 200 | 201 | 204 | 400 | 401 | 403 | 404 | 408 | 500 | 503 | 504;
   data?: Page_ApiEntity_;
   /**
    *
@@ -2275,6 +2845,58 @@ export interface ListApisQueryParams {
   sort?: string[];
 }
 
+export interface ListApplicationsQueryParams {
+  /**
+   *
+   * 分页号码,从0开始
+   * Format: int32
+   */
+  pageNumber?: number;
+  /**
+   *
+   * 分页大小
+   * Format: int32
+   */
+  pageSize?: number;
+  /**
+   *
+   * 查询条件:应用代码，精准匹配
+   */
+  search_code?: string;
+  /**
+   *
+   * 查询条件:应用名称，模糊匹配
+   */
+  search_name?: string;
+  /**
+   *
+   * 排序规则，格式: 字段名[,asc|desc]，默认升序，支持多字段排序
+   */
+  sort?: string[];
+}
+
+/**
+* 
+        * ListApplicationsResult
+      
+        * 根据参数分页查询数据结果
+*/
+
+export interface ListApplicationsResult {
+  /**
+   *
+   * 返回状态码
+   * Format: int32
+   */
+  code?: 200 | 201 | 204 | 400 | 401 | 403 | 404 | 408 | 500 | 503 | 504;
+  data?: Page_ApplicationEntity_;
+  /**
+   *
+   * 返回消息
+   */
+  message?: string;
+}
+
 /**
 * 
         * ListDepartmentResult
@@ -2288,7 +2910,7 @@ export interface ListDepartmentResult {
    * 返回状态码
    * Format: int32
    */
-  code?: '200' | '201' | '204' | '400' | '401' | '403' | '404' | '408' | '500' | '503' | '504';
+  code?: 200 | 201 | 204 | 400 | 401 | 403 | 404 | 408 | 500 | 503 | 504;
   data?: Page_DepartmentEntity_;
   /**
    *
@@ -2347,6 +2969,11 @@ export interface ListDepartmentsQueryParams {
   search_organizationId?: string;
   /**
    *
+   * 查询条件:所属组织机构ID数组，精确匹配
+   */
+  search_organizationIds?: string;
+  /**
+   *
    * 查询条件:所属组织机构名称，模糊匹配
    */
   search_organizationName?: string;
@@ -2355,6 +2982,11 @@ export interface ListDepartmentsQueryParams {
    * 查询条件:上级部门ID，精确匹配
    */
   search_parentId?: string;
+  /**
+   *
+   * 查询条件:上级部门ID数组，精确匹配
+   */
+  search_parentIds?: string[];
   /**
    *
    * 查询条件:上级部门名称，模糊匹配
@@ -2440,7 +3072,7 @@ export interface ListDictionaryResult {
    * 返回状态码
    * Format: int32
    */
-  code?: '200' | '201' | '204' | '400' | '401' | '403' | '404' | '408' | '500' | '503' | '504';
+  code?: 200 | 201 | 204 | 400 | 401 | 403 | 404 | 408 | 500 | 503 | 504;
   data?: Page_DictionaryEntity_;
   /**
    *
@@ -2462,7 +3094,7 @@ export interface ListDictionaryTypeByCodeResult {
    * 返回状态码
    * Format: int32
    */
-  code?: '200' | '201' | '204' | '400' | '401' | '403' | '404' | '408' | '500' | '503' | '504';
+  code?: 200 | 201 | 204 | 400 | 401 | 403 | 404 | 408 | 500 | 503 | 504;
   /**
    *
    * 返回的泛型数据
@@ -2488,7 +3120,7 @@ export interface ListDictionaryTypeItemsByCodeResult {
    * 返回状态码
    * Format: int32
    */
-  code?: '200' | '201' | '204' | '400' | '401' | '403' | '404' | '408' | '500' | '503' | '504';
+  code?: 200 | 201 | 204 | 400 | 401 | 403 | 404 | 408 | 500 | 503 | 504;
   /**
    *
    * 返回的泛型数据
@@ -2514,7 +3146,7 @@ export interface ListDictionaryTypeResult {
    * 返回状态码
    * Format: int32
    */
-  code?: '200' | '201' | '204' | '400' | '401' | '403' | '404' | '408' | '500' | '503' | '504';
+  code?: 200 | 201 | 204 | 400 | 401 | 403 | 404 | 408 | 500 | 503 | 504;
   data?: Page_DictionaryTypeEntity_;
   /**
    *
@@ -2651,7 +3283,7 @@ export interface ListDutyResult {
    * 返回状态码
    * Format: int32
    */
-  code?: '200' | '201' | '204' | '400' | '401' | '403' | '404' | '408' | '500' | '503' | '504';
+  code?: 200 | 201 | 204 | 400 | 401 | 403 | 404 | 408 | 500 | 503 | 504;
   data?: Page_DutyEntity_;
   /**
    *
@@ -2673,7 +3305,7 @@ export interface ListEnumsByTypeResult {
    * 返回状态码
    * Format: int32
    */
-  code?: '200' | '201' | '204' | '400' | '401' | '403' | '404' | '408' | '500' | '503' | '504';
+  code?: 200 | 201 | 204 | 400 | 401 | 403 | 404 | 408 | 500 | 503 | 504;
   /**
    *
    * 返回的泛型数据
@@ -2699,7 +3331,7 @@ export interface ListOrganizationResult {
    * 返回状态码
    * Format: int32
    */
-  code?: '200' | '201' | '204' | '400' | '401' | '403' | '404' | '408' | '500' | '503' | '504';
+  code?: 200 | 201 | 204 | 400 | 401 | 403 | 404 | 408 | 500 | 503 | 504;
   data?: Page_OrganizationEntity_;
   /**
    *
@@ -2753,14 +3385,24 @@ export interface ListOrganizationsQueryParams {
   search_name?: string;
   /**
    *
-   * 查询条件:级组织机构ID，精确匹配
+   * 查询条件:上级组织机构ID，精确匹配
    */
   search_parentId?: string;
+  /**
+   *
+   * 查询条件:上级组织机构ID数组，精确匹配
+   */
+  search_parentIds?: string[];
   /**
    *
    * 查询条件:上级组织机构名称，模糊匹配
    */
   search_parentName?: string;
+  /**
+   *
+   * 查询条件:组织机构代码，精确匹配
+   */
+  search_specificCode?: string;
   /**
    *
    * 排序规则，格式: 字段名[,asc|desc]，默认升序，支持多字段排序
@@ -2781,7 +3423,7 @@ export interface ListPermissionResult {
    * 返回状态码
    * Format: int32
    */
-  code?: '200' | '201' | '204' | '400' | '401' | '403' | '404' | '408' | '500' | '503' | '504';
+  code?: 200 | 201 | 204 | 400 | 401 | 403 | 404 | 408 | 500 | 503 | 504;
   data?: Page_PermissionEntity_;
   /**
    *
@@ -2803,6 +3445,11 @@ export interface ListPermissionsQueryParams {
    * Format: int32
    */
   pageSize?: number;
+  /**
+   *
+   * 查询条件:应用id，精确匹配
+   */
+  search_applicationId?: string;
   /**
    *
    * 查询条件:权限代码，模糊匹配
@@ -2873,54 +3520,9 @@ export interface ListPermissionsQueryParams {
 export interface ListPermissionsTreeQueryParams {
   /**
    *
-   * 查询条件:权限代码，模糊匹配
+   * 查询条件:应用id，精确匹配
    */
-  search_code?: string;
-  /**
-   *
-   * 查询条件:创建日期起，格式yyyy-mm-dd
-   */
-  search_createDateBegin?: string;
-  /**
-   *
-   * 查询条件:创建日期止，格式yyyy-mm-dd
-   */
-  search_createDateEnd?: string;
-  /**
-   *
-   * 查询条件:权限描述，模糊匹配
-   */
-  search_description?: string;
-  /**
-   *
-   * 查询条件:权限图标，模糊匹配
-   */
-  search_icon?: string;
-  /**
-   *
-   * 查询条件:是否可用，，1：是，0：否，精确匹配
-   */
-  search_isEnable?: '0' | '1';
-  /**
-   *
-   * 查询条件:权限名称，模糊匹配
-   */
-  search_name?: string;
-  /**
-   *
-   * 查询条件:上级权限代码，模糊匹配
-   */
-  search_parentCode?: string;
-  /**
-   *
-   * 查询条件:上级权限ID，精确匹配
-   */
-  search_parentId?: string;
-  /**
-   *
-   * 查询条件:上级权限名称，模糊匹配
-   */
-  search_parentName?: string;
+  search_applicationId?: string;
   /**
    *
    * 查询条件:权限类型，精确匹配
@@ -2928,9 +3530,9 @@ export interface ListPermissionsTreeQueryParams {
   search_type?: string;
   /**
    *
-   * 查询条件:权限地址，模糊匹配
+   * 查询条件:权限类型，精确匹配
    */
-  search_url?: string;
+  search_types?: undefined;
 }
 
 /**
@@ -2946,7 +3548,7 @@ export interface ListReservableConfigResult {
    * 返回状态码
    * Format: int32
    */
-  code?: '200' | '201' | '204' | '400' | '401' | '403' | '404' | '408' | '500' | '503' | '504';
+  code?: 200 | 201 | 204 | 400 | 401 | 403 | 404 | 408 | 500 | 503 | 504;
   data?: Page_AuditableEntity_;
   /**
    *
@@ -3060,6 +3662,83 @@ export interface ListReservableConfigsQueryParams {
   sort?: string[];
 }
 
+export interface ListResourcesQueryParams {
+  /**
+   *
+   * 分页号码,从0开始
+   * Format: int32
+   */
+  pageNumber?: number;
+  /**
+   *
+   * 分页大小
+   * Format: int32
+   */
+  pageSize?: number;
+  /**
+   *
+   * 查询条件:资源代码，等于
+   */
+  search_code?: string;
+  /**
+   *
+   * 查询条件:资源描述，等于
+   */
+  search_description?: string;
+  /**
+   *
+   * 查询条件:资源名称，等于
+   */
+  search_name?: string;
+  /**
+   *
+   * 查询条件:资源ID，等于
+   */
+  search_service?: string;
+  /**
+   *
+   * 查询条件:排序索引，等于
+   */
+  search_sortIndex?: string;
+  /**
+   *
+   * 查询条件:资源类型，1：Spring Cloud资源，2：HTTP资源，等于
+   */
+  search_type?: string;
+  /**
+   *
+   * 查询条件:URL地址，等于
+   */
+  search_url?: string;
+  /**
+   *
+   * 排序规则，格式: 字段名[,asc|desc]，默认升序，支持多字段排序
+   */
+  sort?: string[];
+}
+
+/**
+* 
+        * ListResourcesResult
+      
+        * 根据参数分页查询数据结果
+*/
+
+export interface ListResourcesResult {
+  /**
+   *
+   * 返回状态码
+   * Format: int32
+   */
+  code?: 200 | 201 | 204 | 400 | 401 | 403 | 404 | 408 | 500 | 503 | 504;
+  data?: Page_ResourceEntity_;
+  /**
+   *
+   * 返回消息
+   */
+  message?: string;
+}
+
 /**
 * 
         * ListRoleResult
@@ -3073,7 +3752,7 @@ export interface ListRoleResult {
    * 返回状态码
    * Format: int32
    */
-  code?: '200' | '201' | '204' | '400' | '401' | '403' | '404' | '408' | '500' | '503' | '504';
+  code?: 200 | 201 | 204 | 400 | 401 | 403 | 404 | 408 | 500 | 503 | 504;
   data?: Page_RoleEntity_;
   /**
    *
@@ -3095,6 +3774,11 @@ export interface ListRolesQueryParams {
    * Format: int32
    */
   pageSize?: number;
+  /**
+   *
+   * 查询条件:应用id，精准匹配
+   */
+  search_applicationId?: string;
   /**
    *
    * 查询条件:角色代码，模糊匹配
@@ -3160,7 +3844,7 @@ export interface ListTypesResult {
    * 返回状态码
    * Format: int32
    */
-  code?: '200' | '201' | '204' | '400' | '401' | '403' | '404' | '408' | '500' | '503' | '504';
+  code?: 200 | 201 | 204 | 400 | 401 | 403 | 404 | 408 | 500 | 503 | 504;
   /**
    *
    * 返回的泛型数据
@@ -3188,6 +3872,11 @@ export interface ListUsersQueryParams {
   pageSize?: number;
   /**
    *
+   * 查询条件:应用id，精确匹配
+   */
+  search_applicationId?: string;
+  /**
+   *
    * 查询条件:创建日期起，格式yyyy-mm-dd
    */
   search_createDateBegin?: string;
@@ -3201,6 +3890,11 @@ export interface ListUsersQueryParams {
    * 查询条件:所属部门ID，精确匹配
    */
   search_departmentId?: string;
+  /**
+   *
+   * 查询条件:所属部门ID数组，精确匹配
+   */
+  search_departmentIds?: string[];
   /**
    *
    * 查询条件:所属部门名称，模糊匹配
@@ -3238,9 +3932,19 @@ export interface ListUsersQueryParams {
   search_organizationId?: string;
   /**
    *
+   * 查询条件:所属组织机构ID数组，精确匹配
+   */
+  search_organizationIds?: string[];
+  /**
+   *
    * 查询条件:所属组织机构名称，模糊匹配
    */
   search_organizationName?: string;
+  /**
+   *
+   * 查询条件:角色id，精确匹配
+   */
+  search_roleId?: string;
   /**
    *
    * 查询条件:岗位代码，对应岗位字典，精确匹配
@@ -3271,7 +3975,7 @@ export interface ListUsersResult {
    * 返回状态码
    * Format: int32
    */
-  code?: '200' | '201' | '204' | '400' | '401' | '403' | '404' | '408' | '500' | '503' | '504';
+  code?: 200 | 201 | 204 | 400 | 401 | 403 | 404 | 408 | 500 | 503 | 504;
   data?: Page_UserEntity_;
   /**
    *
@@ -3293,8 +3997,30 @@ export interface LoadApiByIdResult {
    * 返回状态码
    * Format: int32
    */
-  code?: '200' | '201' | '204' | '400' | '401' | '403' | '404' | '408' | '500' | '503' | '504';
+  code?: 200 | 201 | 204 | 400 | 401 | 403 | 404 | 408 | 500 | 503 | 504;
   data?: ApiEntity;
+  /**
+   *
+   * 返回消息
+   */
+  message?: string;
+}
+
+/**
+* 
+        * LoadApplicationByIdResult
+      
+        * 根据ID查询数据结果
+*/
+
+export interface LoadApplicationByIdResult {
+  /**
+   *
+   * 返回状态码
+   * Format: int32
+   */
+  code?: 200 | 201 | 204 | 400 | 401 | 403 | 404 | 408 | 500 | 503 | 504;
+  data?: ApplicationEntity;
   /**
    *
    * 返回消息
@@ -3315,7 +4041,7 @@ export interface LoadDepartmentByIdResult {
    * 返回状态码
    * Format: int32
    */
-  code?: '200' | '201' | '204' | '400' | '401' | '403' | '404' | '408' | '500' | '503' | '504';
+  code?: 200 | 201 | 204 | 400 | 401 | 403 | 404 | 408 | 500 | 503 | 504;
   data?: DepartmentEntity;
   /**
    *
@@ -3337,7 +4063,7 @@ export interface LoadDictionaryByIdResult {
    * 返回状态码
    * Format: int32
    */
-  code?: '200' | '201' | '204' | '400' | '401' | '403' | '404' | '408' | '500' | '503' | '504';
+  code?: 200 | 201 | 204 | 400 | 401 | 403 | 404 | 408 | 500 | 503 | 504;
   data?: DictionaryEntity;
   /**
    *
@@ -3359,7 +4085,7 @@ export interface LoadDictionaryTypeByIdResult {
    * 返回状态码
    * Format: int32
    */
-  code?: '200' | '201' | '204' | '400' | '401' | '403' | '404' | '408' | '500' | '503' | '504';
+  code?: 200 | 201 | 204 | 400 | 401 | 403 | 404 | 408 | 500 | 503 | 504;
   data?: DictionaryTypeEntity;
   /**
    *
@@ -3381,7 +4107,7 @@ export interface LoadDutyByIdResult {
    * 返回状态码
    * Format: int32
    */
-  code?: '200' | '201' | '204' | '400' | '401' | '403' | '404' | '408' | '500' | '503' | '504';
+  code?: 200 | 201 | 204 | 400 | 401 | 403 | 404 | 408 | 500 | 503 | 504;
   data?: DutyEntity;
   /**
    *
@@ -3403,7 +4129,7 @@ export interface LoadOrganizationByIdResult {
    * 返回状态码
    * Format: int32
    */
-  code?: '200' | '201' | '204' | '400' | '401' | '403' | '404' | '408' | '500' | '503' | '504';
+  code?: 200 | 201 | 204 | 400 | 401 | 403 | 404 | 408 | 500 | 503 | 504;
   data?: OrganizationEntity;
   /**
    *
@@ -3425,7 +4151,7 @@ export interface LoadPermissionByIdResult {
    * 返回状态码
    * Format: int32
    */
-  code?: '200' | '201' | '204' | '400' | '401' | '403' | '404' | '408' | '500' | '503' | '504';
+  code?: 200 | 201 | 204 | 400 | 401 | 403 | 404 | 408 | 500 | 503 | 504;
   data?: PermissionEntity;
   /**
    *
@@ -3447,7 +4173,7 @@ export interface LoadReservableConfigByIdResult {
    * 返回状态码
    * Format: int32
    */
-  code?: '200' | '201' | '204' | '400' | '401' | '403' | '404' | '408' | '500' | '503' | '504';
+  code?: 200 | 201 | 204 | 400 | 401 | 403 | 404 | 408 | 500 | 503 | 504;
   data?: AuditableEntity;
   /**
    *
@@ -3469,8 +4195,30 @@ export interface LoadReservableConfigByObjectTypeResult {
    * 返回状态码
    * Format: int32
    */
-  code?: '200' | '201' | '204' | '400' | '401' | '403' | '404' | '408' | '500' | '503' | '504';
+  code?: 200 | 201 | 204 | 400 | 401 | 403 | 404 | 408 | 500 | 503 | 504;
   data?: AuditableEntity;
+  /**
+   *
+   * 返回消息
+   */
+  message?: string;
+}
+
+/**
+* 
+        * LoadResourceByIdResult
+      
+        * 根据ID查询数据结果
+*/
+
+export interface LoadResourceByIdResult {
+  /**
+   *
+   * 返回状态码
+   * Format: int32
+   */
+  code?: 200 | 201 | 204 | 400 | 401 | 403 | 404 | 408 | 500 | 503 | 504;
+  data?: ResourceEntity;
   /**
    *
    * 返回消息
@@ -3491,7 +4239,7 @@ export interface LoadRoleByIdResult {
    * 返回状态码
    * Format: int32
    */
-  code?: '200' | '201' | '204' | '400' | '401' | '403' | '404' | '408' | '500' | '503' | '504';
+  code?: 200 | 201 | 204 | 400 | 401 | 403 | 404 | 408 | 500 | 503 | 504;
   data?: RoleEntity;
   /**
    *
@@ -3513,7 +4261,7 @@ export interface LoadUserByIdResult {
    * 返回状态码
    * Format: int32
    */
-  code?: '200' | '201' | '204' | '400' | '401' | '403' | '404' | '408' | '500' | '503' | '504';
+  code?: 200 | 201 | 204 | 400 | 401 | 403 | 404 | 408 | 500 | 503 | 504;
   data?: UserEntity;
   /**
    *
@@ -3521,17 +4269,6 @@ export interface LoadUserByIdResult {
    */
   message?: string;
 }
-
-/**
-* 
-        * Map«string,List«Map«string,object»»»
-      
-*/
-
-export interface Map_string_List_Map_string_object_ {
-  [x: string]: any;
-}
-
 /**
 * 
         * Map«string,object»
@@ -3571,13 +4308,13 @@ export interface Organization {
    * 是否删除
    * Format: int32
    */
-  isDelete: '0' | '1';
+  isDelete: 0 | 1;
   /**
    *
    * 是否可用
    * Format: int32
    */
-  isEnable: '1' | '0';
+  isEnable: 1 | 0;
   /**
    *
    * 组织机构名称
@@ -3630,13 +4367,13 @@ export interface OrganizationEntity {
    * 是否删除
    * Format: int32
    */
-  isDelete: '0' | '1';
+  isDelete: 0 | 1;
   /**
    *
    * 是否可用
    * Format: int32
    */
-  isEnable: '1' | '0';
+  isEnable: 1 | 0;
   /**
    *
    * 组织机构名称
@@ -3670,6 +4407,7 @@ export interface OrganizationEntity {
    * 组织机构描述
    */
   description?: string;
+  idIfNotProvide?: string;
   /**
    *
    * 最后修改时间
@@ -3699,7 +4437,7 @@ export interface OrganizationTreeResult {
    * 返回状态码
    * Format: int32
    */
-  code?: '200' | '201' | '204' | '400' | '401' | '403' | '404' | '408' | '500' | '503' | '504';
+  code?: 200 | 201 | 204 | 400 | 401 | 403 | 404 | 408 | 500 | 503 | 504;
   /**
    *
    * 返回的泛型数据
@@ -3710,14 +4448,6 @@ export interface OrganizationTreeResult {
    * 返回消息
    */
   message?: string;
-}
-
-export interface OrganizationsTreeQueryParams {
-  /**
-   *
-   * 查询条件:组织机构或部门名称，精确匹配
-   */
-  search_name?: string;
 }
 
 /**
@@ -3768,6 +4498,86 @@ export interface Page_ApiEntity_ {
 
 export interface Page_Api_ {
   content?: Api[];
+  empty?: boolean;
+  first?: boolean;
+  last?: boolean;
+  /**
+   *
+   * Format: int32
+   */
+  number?: number;
+  /**
+   *
+   * Format: int32
+   */
+  numberOfElements?: number;
+  pageable?: SwaggerPage;
+  /**
+   *
+   * Format: int32
+   */
+  size?: number;
+  sort?: Sort;
+  /**
+   *
+   * Format: int64
+   */
+  totalElements?: number;
+  /**
+   *
+   * Format: int32
+   */
+  totalPages?: number;
+}
+
+/**
+* 
+        * Page«ApplicationEntity»
+      
+*/
+
+export interface Page_ApplicationEntity_ {
+  content?: ApplicationEntity[];
+  empty?: boolean;
+  first?: boolean;
+  last?: boolean;
+  /**
+   *
+   * Format: int32
+   */
+  number?: number;
+  /**
+   *
+   * Format: int32
+   */
+  numberOfElements?: number;
+  pageable?: SwaggerPage;
+  /**
+   *
+   * Format: int32
+   */
+  size?: number;
+  sort?: Sort;
+  /**
+   *
+   * Format: int64
+   */
+  totalElements?: number;
+  /**
+   *
+   * Format: int32
+   */
+  totalPages?: number;
+}
+
+/**
+* 
+        * Page«Application»
+      
+*/
+
+export interface Page_Application_ {
+  content?: Application[];
   empty?: boolean;
   first?: boolean;
   last?: boolean;
@@ -4362,6 +5172,86 @@ export interface Page_ReservableConfig_ {
 
 /**
 * 
+        * Page«ResourceEntity»
+      
+*/
+
+export interface Page_ResourceEntity_ {
+  content?: ResourceEntity[];
+  empty?: boolean;
+  first?: boolean;
+  last?: boolean;
+  /**
+   *
+   * Format: int32
+   */
+  number?: number;
+  /**
+   *
+   * Format: int32
+   */
+  numberOfElements?: number;
+  pageable?: SwaggerPage;
+  /**
+   *
+   * Format: int32
+   */
+  size?: number;
+  sort?: Sort;
+  /**
+   *
+   * Format: int64
+   */
+  totalElements?: number;
+  /**
+   *
+   * Format: int32
+   */
+  totalPages?: number;
+}
+
+/**
+* 
+        * Page«Resource»
+      
+*/
+
+export interface Page_Resource_ {
+  content?: Resource[];
+  empty?: boolean;
+  first?: boolean;
+  last?: boolean;
+  /**
+   *
+   * Format: int32
+   */
+  number?: number;
+  /**
+   *
+   * Format: int32
+   */
+  numberOfElements?: number;
+  pageable?: SwaggerPage;
+  /**
+   *
+   * Format: int32
+   */
+  size?: number;
+  sort?: Sort;
+  /**
+   *
+   * Format: int64
+   */
+  totalElements?: number;
+  /**
+   *
+   * Format: int32
+   */
+  totalPages?: number;
+}
+
+/**
+* 
         * Page«RoleEntity»
       
 */
@@ -4550,13 +5440,13 @@ export interface Permission {
    * 是否删除
    * Format: int32
    */
-  isDelete: '0' | '1';
+  isDelete: 0 | 1;
   /**
    *
    * 是否可用
    * Format: int32
    */
-  isEnable: '1' | '0';
+  isEnable: 1 | 0;
   /**
    *
    * 权限名称
@@ -4567,7 +5457,7 @@ export interface Permission {
    * 权限类型
    * Format: int32
    */
-  type: '0' | '1' | '2';
+  type: 0 | 1 | 2;
   additionalInformation?: { [x in string | number]: any };
   apis?: Api[];
   /**
@@ -4619,13 +5509,13 @@ export interface PermissionEntity {
    * 是否删除
    * Format: int32
    */
-  isDelete: '0' | '1';
+  isDelete: 0 | 1;
   /**
    *
    * 是否可用
    * Format: int32
    */
-  isEnable: '1' | '0';
+  isEnable: 1 | 0;
   /**
    *
    * 权限名称
@@ -4637,7 +5527,7 @@ export interface PermissionEntity {
    * 权限类型
    * Format: int32
    */
-  type: '0' | '1' | '2';
+  type: 0 | 1 | 2;
   /**
    *
    * 附加信息，map类型
@@ -4675,6 +5565,7 @@ export interface PermissionEntity {
    * 图标
    */
   icon?: string;
+  idIfNotProvide?: string;
   /**
    *
    * 最后修改时间
@@ -4724,7 +5615,7 @@ export interface PermissionTreeResult {
    * 返回状态码
    * Format: int32
    */
-  code?: '200' | '201' | '204' | '400' | '401' | '403' | '404' | '408' | '500' | '503' | '504';
+  code?: 200 | 201 | 204 | 400 | 401 | 403 | 404 | 408 | 500 | 503 | 504;
   /**
    *
    * 返回的泛型数据
@@ -4760,7 +5651,7 @@ export interface PrincipalInfoResult {
    * 返回状态码
    * Format: int32
    */
-  code?: '200' | '201' | '204' | '400' | '401' | '403' | '404' | '408' | '500' | '503' | '504';
+  code?: 200 | 201 | 204 | 400 | 401 | 403 | 404 | 408 | 500 | 503 | 504;
   data?: Principal;
   /**
    *
@@ -4775,6 +5666,13 @@ export interface PrincipalInfoResult {
  */
 
 export type RequestBodyApiEntity = ApiEntity;
+
+/**
+ *
+ * 实体参数
+ */
+
+export type RequestBodyApplicationEntity = ApplicationEntity;
 
 /**
  *
@@ -4820,6 +5718,13 @@ export type RequestBodyPermissionEntity = PermissionEntity;
 
 /**
  *
+ * 实体参数
+ */
+
+export type RequestBodyResourceEntity = ResourceEntity;
+
+/**
+ *
  * 角色实体参数
  */
 
@@ -4831,6 +5736,13 @@ export type RequestBodyRoleEntity = RoleEntity;
  */
 
 export type RequestBodyUserEntity = UserEntity;
+
+/**
+ *
+ * 用户id数组
+ */
+
+export type RequestBodyBatchDeleteUserByIdsBody = string[];
 
 /**
 * 
@@ -4856,13 +5768,13 @@ export interface ReservableConfig {
    * 是否删除
    * Format: int32
    */
-  isDelete: '0' | '1';
+  isDelete: 0 | 1;
   /**
    *
    * 是否可用
    * Format: int32
    */
-  isEnable: '1' | '0';
+  isEnable: 1 | 0;
   /**
    *
    * 预留字段配置的类型
@@ -4942,6 +5854,7 @@ export interface ReservableValuesEntity {
    * Format: double
    */
   double3?: number;
+  idIfNotProvide?: string;
   /**
    *
    * Format: int64
@@ -5055,18 +5968,24 @@ export interface Resource {
    * 是否删除
    * Format: int32
    */
-  isDelete: '0' | '1';
+  isDelete: 0 | 1;
   /**
    *
    * 是否可用
    * Format: int32
    */
-  isEnable: '1' | '0';
+  isEnable: 1 | 0;
   /**
    *
    * 资源名称
    */
   name: string;
+  /**
+   *
+   * 资源类型
+   * Format: int32
+   */
+  type: 0 | 1;
   /**
    *
    * 资源url地址
@@ -5099,6 +6018,11 @@ export interface Resource {
 export interface ResourceEntity {
   /**
    *
+   * 接口列表, 树形结构
+   */
+  apis: ApiEntity[];
+  /**
+   *
    * 资源编码
    */
   code: string;
@@ -5119,19 +6043,25 @@ export interface ResourceEntity {
    * 是否删除
    * Format: int32
    */
-  isDelete: '0' | '1';
+  isDelete: 0 | 1;
   /**
    *
    * 是否可用
    * Format: int32
    */
-  isEnable: '1' | '0';
+  isEnable: 1 | 0;
   /**
    *
    * 资源名称
    */
   name: string;
   reservableValues: ReservableValuesEntity;
+  /**
+   *
+   * 资源类型
+   * Format: int32
+   */
+  type: 0 | 1;
   /**
    *
    * 服务URL
@@ -5154,6 +6084,7 @@ export interface ResourceEntity {
    * 资源描述
    */
   description?: string;
+  idIfNotProvide?: string;
   /**
    *
    * 最后修改时间
@@ -5166,6 +6097,12 @@ export interface ResourceEntity {
    * 服务ID
    */
   serviceId?: string;
+  /**
+   *
+   * 排序索引
+   * Format: int32
+   */
+  sortIndex?: number;
 }
 
 /**
@@ -5181,7 +6118,7 @@ export interface RestResult {
    * 返回状态码
    * Format: int32
    */
-  code?: '200' | '201' | '204' | '400' | '401' | '403' | '404' | '408' | '500' | '503' | '504';
+  code?: 200 | 201 | 204 | 400 | 401 | 403 | 404 | 408 | 500 | 503 | 504;
   /**
    *
    * 返回消息
@@ -5219,19 +6156,19 @@ export interface Role {
    * 是否删除
    * Format: int32
    */
-  isDelete: '0' | '1';
+  isDelete: 0 | 1;
   /**
    *
    * 是否可用
    * Format: int32
    */
-  isEnable: '1' | '0';
+  isEnable: 1 | 0;
   /**
    *
    * 是否系统预置
    * Format: int32
    */
-  isSystem: '1' | '0';
+  isSystem: 1 | 0;
   level: Dictionary;
   /**
    *
@@ -5286,19 +6223,19 @@ export interface RoleEntity {
    * 是否删除
    * Format: int32
    */
-  isDelete: '0' | '1';
+  isDelete: 0 | 1;
   /**
    *
    * 是否可用
    * Format: int32
    */
-  isEnable: '1' | '0';
+  isEnable: 1 | 0;
   /**
    *
    * 是否是系统预置
    * Format: int32
    */
-  isSystem: '1' | '0';
+  isSystem: 1 | 0;
   level: DictionaryEntity;
   /**
    *
@@ -5323,6 +6260,7 @@ export interface RoleEntity {
    * 描述
    */
   description?: string;
+  idIfNotProvide?: string;
   /**
    *
    * 最后修改时间
@@ -5403,13 +6341,13 @@ export interface User {
    * 是否删除
    * Format: int32
    */
-  isDelete: '0' | '1';
+  isDelete: 0 | 1;
   /**
    *
    * 是否可用
    * Format: int32
    */
-  isEnable: '1' | '0';
+  isEnable: 1 | 0;
   /**
    *
    * 用户名称
@@ -5431,6 +6369,7 @@ export interface User {
   additionalDepartments?: Department[];
   additionalInformation?: { [x in string | number]: any };
   additionalOrganizations?: Organization[];
+  applications?: Application[];
   authorities?: GrantedAuthority[];
   avatar?: string;
   credentialsNonExpired?: boolean;
@@ -5451,6 +6390,26 @@ export interface User {
   lastModifyUser?: User;
   reservableValues?: ReservableValues_string_;
   roles?: Role[];
+}
+
+/**
+* 
+        * UserChangePasswordVO
+      
+        * 用户修改密码视图对象
+*/
+
+export interface UserChangePasswordVO {
+  /**
+   *
+   * 旧密码
+   */
+  newPassword: string;
+  /**
+   *
+   * 原密码
+   */
+  oldPassword: string;
 }
 
 /**
@@ -5479,13 +6438,13 @@ export interface UserEntity {
    * 是否删除
    * Format: int32
    */
-  isDelete: '0' | '1';
+  isDelete: 0 | 1;
   /**
    *
    * 是否可用
    * Format: int32
    */
-  isEnable: '1' | '0';
+  isEnable: 1 | 0;
   /**
    *
    * 姓名
@@ -5505,6 +6464,11 @@ export interface UserEntity {
    */
   additionalInformation?: { [x in string | number]: any };
   additionalOrganizations?: OrganizationEntity[];
+  /**
+   *
+   * 应用列表
+   */
+  applications?: ApplicationEntity[];
   /**
    *
    * 用户头像
@@ -5528,6 +6492,7 @@ export interface UserEntity {
    * 电子邮箱
    */
   email?: string;
+  idIfNotProvide?: string;
   /**
    *
    * 最后修改时间
@@ -5577,7 +6542,7 @@ export interface UserInfoResult {
    * 返回状态码
    * Format: int32
    */
-  code?: '200' | '201' | '204' | '400' | '401' | '403' | '404' | '408' | '500' | '503' | '504';
+  code?: 200 | 201 | 204 | 400 | 401 | 403 | 404 | 408 | 500 | 503 | 504;
   data?: User;
   /**
    *
