@@ -70,7 +70,6 @@
               : [],
             meta: JSON.stringify(data.meta),
           };
-          console.log('data=', JSON.stringify(data));
           if (unref(isUpdate)) {
             await updatePermission(rowId.value, data);
           } else {

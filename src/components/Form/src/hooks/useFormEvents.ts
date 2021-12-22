@@ -1,7 +1,7 @@
 import type { ComputedRef, Ref } from 'vue';
-import { nextTick, toRaw, unref } from 'vue';
 import type { FormActionType, FormProps, FormSchema } from '../types/form';
 import type { NamePath } from 'ant-design-vue/lib/form/interface';
+import { unref, toRaw, nextTick } from 'vue';
 import { isArray, isFunction, isObject, isString } from '/@/utils/is';
 import { deepMerge } from '/@/utils';
 import {
@@ -51,9 +51,8 @@ export function useFormEvents({
       const defaultValue = getProperty(defaultValueRef.value, item.field);
       setProperty(formModel, item.field, defaultValue);
     });
-    await nextTick(() => {
-      clearValidate();
-    });
+    nextTick(() => clearValidate());
+
     emit('reset', toRaw(formModel));
     submitOnReset && handleSubmit();
   }
