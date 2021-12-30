@@ -59,6 +59,8 @@ export interface FormProps {
   rowProps?: RowProps;
   // Submit form on reset
   submitOnReset?: boolean;
+  // Submit form on form changing
+  submitOnChange?: boolean;
   // Col configuration for the entire form
   labelCol?: Partial<ColEx>;
   // Col configuration for the entire form

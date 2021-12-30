@@ -9,6 +9,7 @@ import {
   hasProperty,
   setProperty,
   handleInputNumberValue,
+  defaultValueComponents,
   rangeDateItemType,
   singleDateItemType,
   dateItemType,
@@ -48,8 +49,9 @@ export function useFormEvents({
 
     const schemas = unref(getSchema);
     schemas.forEach((item) => {
+      const isInput = item?.component && defaultValueComponents.includes(item.component);
       const defaultValue = getProperty(defaultValueRef.value, item.field);
-      setProperty(formModel, item.field, defaultValue);
+      setProperty(formModel, item.field, isInput ? defaultValue || '' : defaultValue);
     });
     await nextTick(() => clearValidate());
 

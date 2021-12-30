@@ -113,3 +113,5 @@ export function deleteProperty(target: object, property: string | number | (stri
 export function hasProperty(target: object, property: string | number | (string | number)[]) {
   return isString(property) ? Reflect.has(target, property) : has(target, property);
 }
+
+export const defaultValueComponents = ['Input', 'InputPassword', 'InputSearch', 'InputTextArea'];
