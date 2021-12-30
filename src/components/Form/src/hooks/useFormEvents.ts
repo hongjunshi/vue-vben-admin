@@ -51,7 +51,7 @@ export function useFormEvents({
       const defaultValue = getProperty(defaultValueRef.value, item.field);
       setProperty(formModel, item.field, defaultValue);
     });
-    nextTick(() => clearValidate());
+    await nextTick(() => clearValidate());
 
     emit('reset', toRaw(formModel));
     submitOnReset && handleSubmit();

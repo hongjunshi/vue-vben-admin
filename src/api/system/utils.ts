@@ -10,6 +10,11 @@ interface GetEnumItemsParam {
 export async function getEnumItems(params: GetEnumItemsParam) {
   return await listEnumItemsByType(params.type);
 }
+export function getEnum(params: GetEnumItemsParam) {
+  const items: any[] = [];
+  listEnumItemsByType(params.type).then((result) => items.push(...result));
+  return items;
+}
 
 interface GetDictionaryItemsParam {
   code: string;
@@ -17,4 +22,9 @@ interface GetDictionaryItemsParam {
 
 export async function getDictionaryItems(params: GetDictionaryItemsParam) {
   return await listDictionaryTypeItemsByCode(params.code);
+}
+export function getDictionary(params: GetDictionaryItemsParam) {
+  const items: any[] = [];
+  listDictionaryTypeItemsByCode(params.code).then((result) => items.push(...result));
+  return items;
 }

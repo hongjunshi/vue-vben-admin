@@ -4,13 +4,17 @@ import { Tag } from 'ant-design-vue';
 import { Icon } from '/@/components/Icon';
 import { Time } from '/@/components/Time';
 import { useI18n } from '/@/hooks/web/useI18n';
-import { getEnumItems } from '/@/api/system/utils';
+import { getEnum, getEnumItems } from '/@/api/system/utils';
 import { apiTree, listPermissionsTree } from '/@/api/system';
 import { pinyin } from 'pinyin-pro';
 
 export const { t } = useI18n();
 
-const isEnableEnums = (await getEnumItems({ type: 'IsEnable' })) || [];
+const isEnableEnums: any[] = getEnum({ type: 'IsEnable' });
+
+getEnumItems({ type: 'IsEnable' }).then((result) =>
+  result.forEach((item) => isEnableEnums.push(item))
+);
 export const columns: BasicColumn[] = [
   {
     title: '功能名称',

@@ -1,8 +1,10 @@
 <template>
   <div>
-    <BasicTable @register="registerTable" @fetch-success="onFetchSuccess">
+    <BasicTable @register="registerTable">
       <template #toolbar>
-        <a-button type="primary" @click="handleCreate"> 新增功能</a-button>
+        <a-button type="primary" @click="handleCreate" v-auth="'system:roles:create'">
+          新增角色</a-button
+        >
       </template>
       <template #action="{ record }">
         <TableAction
@@ -10,6 +12,7 @@
             {
               icon: 'clarity:note-edit-line',
               onClick: handleEdit.bind(null, record),
+              auth: 'system:roles:update',
             },
             {
               icon: 'ant-design:delete-outlined',
@@ -19,46 +22,41 @@
                 confirm: handleDelete.bind(null, record),
                 placement: 'left',
               },
+              auth: 'system:roles:delete',
             },
           ]"
         />
       </template>
     </BasicTable>
-    <PermissionModal @register="registerModal" @success="handleSuccess" />
+    <RoleModal @register="registerModal" @success="handleSuccess" />
   </div>
 </template>
 <script lang="ts">
-  import { defineComponent, nextTick } from 'vue';
+  import { defineComponent } from 'vue';
 
   import { BasicTable, TableAction, useTable } from '/@/components/Table';
-  import { deletePermissionById, listPermissionsTree } from '/@/api/system';
+  import { deleteRoleById, listRoles } from '/@/api/system';
 
-  import PermissionModal from './PermissionModal.vue';
+  import RoleModal from './RoleModal.vue';
 
-  import { columns, searchFormSchema } from './permission.data';
+  import { columns, searchFormSchema } from './role.data';
   import { useModal } from '/@/components/Modal';
-
+  import tableSetting from '/@/settings/defaultTableSetting';
   export default defineComponent({
-    name: 'PermissionList',
-    components: { BasicTable, PermissionModal, TableAction },
+    name: 'RoleList',
+    components: { BasicTable, RoleModal, TableAction },
     setup() {
       const [registerModal, { openModal }] = useModal();
-      const [registerTable, { reload, expandAll }] = useTable({
-        title: '功能列表',
-        api: listPermissionsTree,
+      const [registerTable, { reload }] = useTable({
+        ...tableSetting,
+        title: '角色列表',
+        api: listRoles,
         columns,
+        useSearchForm: true,
         formConfig: {
           labelWidth: 120,
           schemas: searchFormSchema,
         },
-        isTreeTable: true,
-        pagination: false,
-        striped: false,
-        useSearchForm: true,
-        showTableSetting: true,
-        bordered: true,
-        showIndexColumn: false,
-        canResize: false,
         actionColumn: {
           width: 80,
           title: '操作',
@@ -82,18 +80,13 @@
       }
 
       function handleDelete(record: Recordable) {
-        deletePermissionById(record.id).then(() => {
+        deleteRoleById(record.id).then(() => {
           reload();
         });
       }
 
       function handleSuccess() {
         reload();
-      }
-
-      function onFetchSuccess() {
-        // 演示默认展开所有表项
-        nextTick(expandAll);
       }
 
       return {
@@ -103,7 +96,6 @@
         handleEdit,
         handleDelete,
         handleSuccess,
-        onFetchSuccess,
       };
     },
   });

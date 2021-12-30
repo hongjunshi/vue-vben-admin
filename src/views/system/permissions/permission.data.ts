@@ -4,13 +4,13 @@ import { Tag } from 'ant-design-vue';
 import { Icon } from '/@/components/Icon';
 import { Time } from '/@/components/Time';
 import { useI18n } from '/@/hooks/web/useI18n';
-import { getEnumItems } from '/@/api/system/utils';
+import { getEnum, getEnumItems } from '/@/api/system/utils';
 import { apiTree, listPermissionsTree } from '/@/api/system';
 import { pinyin } from 'pinyin-pro';
 
 export const { t } = useI18n();
 
-const isEnableEnums = (await getEnumItems({ type: 'IsEnable' })) || [];
+const isEnableEnums: any[] = getEnum({ type: 'IsEnable' });
 export const columns: BasicColumn[] = [
   {
     title: '功能名称',
@@ -320,8 +320,13 @@ export const formSchema: FormSchema[] = [
       treeCheckable: true,
       maxTagCount: 4,
       filterTreeNode: (inputValue: string, treeNode: any) => {
-        const title = pinyin(treeNode?.title, { toneType: 'none' }).toLowerCase();
-        const value = pinyin(inputValue, { toneType: 'none' }).replace("'", ' ').toLowerCase();
+        const title = pinyin(treeNode?.title, { toneType: 'none' })
+          .toLowerCase()
+          .replaceAll(' ', '');
+        const value = pinyin(inputValue, { toneType: 'none' })
+          .replaceAll("'", '')
+          .toLowerCase()
+          .replaceAll(' ', '');
         return title.indexOf(value) > -1;
       },
       getPopupContainer: () => document.body,

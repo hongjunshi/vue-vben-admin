@@ -49,3 +49,11 @@
     opacity: 0.75;
   }
 }
+//解决表格无数据出现滚动条的问题
+.ant-table-empty .ant-table-content {
+  overflow: hidden !important;
+}
+//解决弹出底部空白太大的问题
+.ant-modal .scroll-container .scrollbar__wrap {
+  margin-bottom: 0;
+}

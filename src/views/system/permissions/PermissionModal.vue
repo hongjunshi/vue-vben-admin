@@ -10,6 +10,7 @@
   import { formSchema, parentIdSchema } from './permission.data';
   import { createPermission, loadPermissionById, updatePermission } from '/@/api/system';
   import { cloneDeep } from 'lodash-es';
+
   export default defineComponent({
     name: 'PermissionModal',
     components: { BasicModal, BasicForm },

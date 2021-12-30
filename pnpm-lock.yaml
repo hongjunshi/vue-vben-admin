@@ -41,7 +41,7 @@ specifiers:
   '@vueuse/core': ^7.4.0
   '@vueuse/shared': ^7.4.0
   '@zxcvbn-ts/core': ^1.2.0
-  ant-design-vue: 3.0.0-alpha.16
+  ant-design-vue: 3.0.0-alpha.15
   autoprefixer: ^10.4.0
   axios: ^0.24.0
   codemirror: ^5.64.0
@@ -132,7 +132,7 @@ dependencies:
   '@vueuse/core': 7.4.0_vue@3.2.26
   '@vueuse/shared': 7.4.0_vue@3.2.26
   '@zxcvbn-ts/core': 1.2.0
-  ant-design-vue: 3.0.0-alpha.16_ae87cbba5ec93a01f3fe1197df446ca3
+  ant-design-vue: 3.0.0-alpha.15_ae87cbba5ec93a01f3fe1197df446ca3
   axios: 0.24.0
   codemirror: 5.64.0
   cropperjs: 1.5.12
@@ -3108,8 +3108,8 @@ packages:
     engines: {node: '>=12'}
     dev: true
 
-  /ant-design-vue/3.0.0-alpha.16_ae87cbba5ec93a01f3fe1197df446ca3:
-    resolution: {integrity: sha512-EPWt3F6SOfPXe+HyhOJXdTywdabbuzyARpnXER/zHfq0pYXeFPhki1v5re0afnrS7k6MR/BHJ6cJ1BRBeFqXhQ==}
+  /ant-design-vue/3.0.0-alpha.15_ae87cbba5ec93a01f3fe1197df446ca3:
+    resolution: {integrity: sha512-stDsetOC6XE0SCMYqI3/07FN0eWoWCaRrA54guu3pt1rcpRKvoF78wShGEuAmjlZUdyYFBimSJ//85NbUZ2l/w==}
     peerDependencies:
       '@vue/compiler-sfc': '>=3.1.0'
       vue: '>=3.1.0'
@@ -7178,14 +7178,14 @@ packages:
     dev: true
 
   /is-plain-object/2.0.4:
-    resolution: {integrity: sha1-LBY7P6+xtgbZ0Xko8FwqHDjgdnc=, tarball: is-plain-object/download/is-plain-object-2.0.4.tgz}
+    resolution: {integrity: sha512-h5PpgXkWitc38BBMYawTYMWJHFZJVnBquFE57xFpjB8pJFiF6gZ+bU+WyI/yqXiFR5mdLsgYNaPe8uao6Uv9Og==}
     engines: {node: '>=0.10.0'}
     dependencies:
       isobject: 3.0.1
     dev: true
 
   /is-plain-object/3.0.1:
-    resolution: {integrity: sha1-Zi2S0kwKpDAkB7DUXSHyJRyF+Fs=}
+    resolution: {integrity: sha512-Xnpx182SBMrr/aBik8y+GuR4U1L9FqMSojwDQwPMmxyC6bvEqly9UBCxhauBF5vNh2gwWJNX6oDV7O+OM4z34g==}
     engines: {node: '>=0.10.0'}
     dev: false
 
@@ -7924,7 +7924,7 @@ packages:
     dev: true
 
   /js-tokens/4.0.0:
-    resolution: {integrity: sha1-GSA/tZmR35jjoocFDUZHzerzJJk=, tarball: js-tokens/download/js-tokens-4.0.0.tgz}
+    resolution: {integrity: sha512-RdJUflcE3cUzKiMqQgsCu06FPu9UdIJO0beYbPhHN4k6apgJtifcoCtT9bcxOpYBtpD2kCM6Sbzg4CausW/PKQ==}
 
   /js-yaml/3.14.1:
     resolution: {integrity: sha512-okMH7OXXJ7YrN9Ok3/SXrnu4iX9yOk+25nqX4imS2npuvTYDmo/QEZoqwZkYaIDk3jVvBOTOIEgEhaLOynBS9g==}
