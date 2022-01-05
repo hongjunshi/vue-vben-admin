@@ -3,56 +3,39 @@ import { h } from 'vue';
 import { Tag } from 'ant-design-vue';
 import { Time } from '/@/components/Time';
 import { useI18n } from '/@/hooks/web/useI18n';
-import { getDictionaryItems, getEnum, getEnumItems } from '/@/api/system/utils';
+import { getEnum, getEnumItems } from '/@/api/system/utils';
+import { organizationsTree } from '/@/api/system';
 
 export const { t } = useI18n();
+
 const isEnableEnums: any[] = getEnum({ type: 'IsEnable' });
-const isSystemEnums: any[] = getEnum({ type: 'IsSystem' });
 
 export const columns: BasicColumn[] = [
   {
-    title: '角色名称',
+    title: '组织机构代码',
+    dataIndex: 'code',
+    width: 150,
+    align: 'left',
+  },
+  {
+    title: '组织机构名称',
     dataIndex: 'name',
     align: 'left',
   },
   {
-    title: '角色代码',
-    dataIndex: 'code',
-    width: 200,
+    title: '上级组织机构',
+    dataIndex: 'parent.name'.split('.'),
     align: 'left',
-  },
-  {
-    title: '角色级别',
-    dataIndex: 'level.name'.split('.'),
-    align: 'left',
-    width: 100,
-  },
-  {
-    title: '描述',
-    dataIndex: 'description',
-    align: 'left',
-  },
-  {
-    title: '是否预置',
-    dataIndex: 'isSystem',
-    width: 80,
-    customRender: ({ record }) => {
-      const isSystem = record?.isSystem;
-      const system = ~~isSystem === 1;
-      const color = system ? 'green' : 'red';
-      const text = isSystemEnums.find((i) => i.value === isSystem)?.name;
-      return h(Tag, { color: color }, () => text);
-    },
   },
   {
     title: '是否启用',
     dataIndex: 'status',
     width: 80,
     customRender: ({ record }) => {
-      const isEnable = record?.isEnable;
-      const enable = ~~isEnable === 1;
+      const status = record.isEnable;
+      const enable = ~~status === 1;
       const color = enable ? 'green' : 'red';
-      const text = isEnableEnums.find((i) => i.value === isEnable)?.name;
+      const text = isEnableEnums.find((i) => i.value === record.isEnable)?.name;
       return h(Tag, { color: color }, () => text);
     },
   },
@@ -60,7 +43,6 @@ export const columns: BasicColumn[] = [
     title: '创建时间',
     dataIndex: 'createTime',
     width: 160,
-    align: 'center',
     customRender: ({ record }) => {
       return h(Time, { value: record.createTime, mode: 'datetime' });
     },
@@ -69,14 +51,14 @@ export const columns: BasicColumn[] = [
 
 export const searchFormSchema: FormSchema[] = [
   {
-    field: 'search_name',
-    label: '角色名称',
+    field: 'search_code',
+    label: '组织机构代码',
     component: 'Input',
     colProps: { span: 8 },
   },
   {
-    field: 'search_code',
-    label: '角色代码',
+    field: 'search_name',
+    label: '组织机构名称',
     component: 'Input',
     colProps: { span: 8 },
   },
@@ -96,49 +78,40 @@ export const searchFormSchema: FormSchema[] = [
     colProps: { span: 8 },
   },
 ];
+export const parentIdSchema: FormSchema = {
+  field: 'parent.id'.split('.'),
+  label: '上级组织机构',
+  component: 'ApiTreeSelect',
+  componentProps: {
+    api: organizationsTree,
+    fieldNames: {
+      label: 'name',
+      key: 'id',
+      value: 'id',
+    },
+    getPopupContainer: () => document.body,
+  },
+};
 export const formSchema: FormSchema[] = [
   {
     field: 'name',
-    label: '角色名称',
+    label: '组织机构名称',
     component: 'Input',
     required: true,
+    colProps: { lg: 24, md: 24 },
   },
   {
     field: 'code',
-    label: '角色代码',
+    label: '组织机构代码',
+    required: true,
     component: 'Input',
-    required: true,
   },
+  parentIdSchema,
   {
-    field: 'level.code'.split('.'),
-    label: '角色级别',
-    component: 'ApiSelect',
-    componentProps: {
-      api: getDictionaryItems,
-      params: {
-        code: 'ROLE-LEVEL',
-      },
-      labelField: 'name',
-      valueField: 'code',
-      immediate: true,
-    },
+    field: 'sortIndex',
+    label: '排序',
+    component: 'InputNumber',
     required: true,
-  },
-  {
-    field: 'isSystem',
-    label: '是否预置',
-    component: 'ApiRadioGroup',
-    defaultValue: 0,
-    componentProps: {
-      api: getEnumItems,
-      params: {
-        type: 'IsSystem',
-      },
-      labelField: 'name',
-      valueField: 'value',
-      immediate: true,
-      isBtn: true,
-    },
   },
   {
     field: 'isEnable',
@@ -161,13 +134,5 @@ export const formSchema: FormSchema[] = [
     label: '描述',
     component: 'InputTextArea',
     colProps: { lg: 24, md: 24 },
-  },
-  {
-    field: 'permissions',
-    component: 'TreeSelect',
-    label: '权限',
-    slot: 'permissions',
-    colProps: { lg: 24, md: 24 },
-    rules: [{ required: true, message: '请设置权限', type: 'array' }],
   },
 ];

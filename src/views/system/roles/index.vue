@@ -10,17 +10,18 @@
         <TableAction
           :actions="[
             {
+              tooltip: '编辑角色',
               icon: 'clarity:note-edit-line',
               onClick: handleEdit.bind(null, record),
               auth: 'system:roles:update',
             },
             {
+              tooltip: '删除角色',
               icon: 'ant-design:delete-outlined',
               color: 'error',
               popConfirm: {
                 title: '是否确认删除',
                 confirm: handleDelete.bind(null, record),
-                placement: 'left',
               },
               auth: 'system:roles:delete',
             },
@@ -41,14 +42,14 @@
 
   import { columns, searchFormSchema } from './role.data';
   import { useModal } from '/@/components/Modal';
-  import tableSetting from '/@/settings/defaultTableSetting';
+  import { getTableSetting } from '/@/settings/defaultSetting';
   export default defineComponent({
     name: 'RoleList',
     components: { BasicTable, RoleModal, TableAction },
     setup() {
       const [registerModal, { openModal }] = useModal();
-      const [registerTable, { reload }] = useTable({
-        ...tableSetting,
+      const tableProps = getTableSetting({
+        searchPermissionCode: 'system:roles:search',
         title: '角色列表',
         api: listRoles,
         columns,
@@ -65,6 +66,7 @@
           fixed: undefined,
         },
       });
+      const [registerTable, { reload }] = useTable(tableProps);
 
       function handleCreate() {
         openModal(true, {

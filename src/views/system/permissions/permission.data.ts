@@ -1,6 +1,6 @@
 import { BasicColumn, FormSchema } from '/@/components/Table';
 import { h } from 'vue';
-import { Tag } from 'ant-design-vue';
+import { Tag, TreeSelect } from 'ant-design-vue';
 import { Icon } from '/@/components/Icon';
 import { Time } from '/@/components/Time';
 import { useI18n } from '/@/hooks/web/useI18n';
@@ -56,17 +56,18 @@ export const columns: BasicColumn[] = [
     dataIndex: 'status',
     width: 80,
     customRender: ({ record }) => {
-      const status = record.isEnable;
-      const enable = ~~status === 1;
+      const isEnable = record?.isEnable;
+      const enable = ~~isEnable === 1;
       const color = enable ? 'green' : 'red';
-      const text = isEnableEnums.find((i) => i.value === record.isEnable)?.name;
+      const text = isEnableEnums.find((i) => i.value === isEnable)?.name;
       return h(Tag, { color: color }, () => text);
     },
   },
   {
     title: '创建时间',
     dataIndex: 'createTime',
-    width: 150,
+    width: 160,
+    align: 'center',
     customRender: ({ record }) => {
       return h(Time, { value: record.createTime, mode: 'datetime' });
     },
@@ -318,6 +319,7 @@ export const formSchema: FormSchema[] = [
         value: 'id',
       },
       treeCheckable: true,
+      showCheckedStrategy: TreeSelect.SHOW_CHILD,
       maxTagCount: 4,
       filterTreeNode: (inputValue: string, treeNode: any) => {
         const title = pinyin(treeNode?.title, { toneType: 'none' })

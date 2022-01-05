@@ -2,22 +2,27 @@
   <div>
     <BasicTable @register="registerTable" @fetch-success="onFetchSuccess">
       <template #toolbar>
-        <a-button type="primary" @click="handleCreate"> 新增功能</a-button>
+        <a-button type="primary" @click="handleCreate" v-auth="'system:permissions:create'">
+          新增功能
+        </a-button>
       </template>
       <template #action="{ record }">
         <TableAction
           :actions="[
             {
+              tooltip: '编辑功能',
               icon: 'clarity:note-edit-line',
               onClick: handleEdit.bind(null, record),
+              auth: 'system:permissions:update',
             },
             {
+              tooltip: '删除功能',
               icon: 'ant-design:delete-outlined',
               color: 'error',
+              auth: 'system:permissions:delete',
               popConfirm: {
                 title: '是否确认删除',
                 confirm: handleDelete.bind(null, record),
-                placement: 'left',
               },
             },
           ]"
@@ -32,18 +37,22 @@
 
   import { BasicTable, TableAction, useTable } from '/@/components/Table';
   import { deletePermissionById, listPermissionsTree } from '/@/api/system';
-
   import PermissionModal from './PermissionModal.vue';
 
   import { columns, searchFormSchema } from './permission.data';
   import { useModal } from '/@/components/Modal';
+  import { getTableSetting } from '/@/settings/defaultSetting';
+  import { usePermission } from '/@/hooks/web/usePermission';
 
   export default defineComponent({
     name: 'PermissionList',
     components: { BasicTable, PermissionModal, TableAction },
     setup() {
       const [registerModal, { openModal }] = useModal();
-      const [registerTable, { reload, expandAll }] = useTable({
+      const { hasPermission } = usePermission();
+
+      const tableProps = getTableSetting({
+        searchPermissionCode: 'system:permissions:search',
         title: '功能列表',
         api: listPermissionsTree,
         columns,
@@ -51,22 +60,21 @@
           labelWidth: 120,
           schemas: searchFormSchema,
         },
+        useSearchForm: true,
         isTreeTable: true,
         pagination: false,
-        striped: false,
-        useSearchForm: true,
-        showTableSetting: true,
-        bordered: true,
-        showIndexColumn: false,
-        canResize: false,
         actionColumn: {
           width: 80,
           title: '操作',
           dataIndex: 'action',
           slots: { customRender: 'action' },
           fixed: undefined,
+          ifShow: (_column) => {
+            return hasPermission(['system:permissions:update', 'system:permissions:delete']);
+          },
         },
       });
+      const [registerTable, { reload, expandAll }] = useTable(tableProps);
 
       function handleCreate() {
         openModal(true, {
