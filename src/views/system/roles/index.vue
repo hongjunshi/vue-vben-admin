@@ -44,7 +44,7 @@
   import { useModal } from '/@/components/Modal';
   import { getTableSetting } from '/@/settings/defaultSetting';
   export default defineComponent({
-    name: 'RoleList',
+    name: 'RoleManagement',
     components: { BasicTable, RoleModal, TableAction },
     setup() {
       const [registerModal, { openModal }] = useModal();

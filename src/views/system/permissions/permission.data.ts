@@ -242,7 +242,7 @@ export const formSchema: FormSchema[] = [
 
   {
     field: 'meta.ignoreKeepAlive'.split('.'),
-    label: '是否禁止缓存',
+    label: '是否忽略缓存',
     component: 'RadioButtonGroup',
     componentProps: {
       options: [

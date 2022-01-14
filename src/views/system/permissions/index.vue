@@ -45,7 +45,7 @@
   import { usePermission } from '/@/hooks/web/usePermission';
 
   export default defineComponent({
-    name: 'PermissionList',
+    name: 'PermissionManagement',
     components: { BasicTable, PermissionModal, TableAction },
     setup() {
       const [registerModal, { openModal }] = useModal();
