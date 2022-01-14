@@ -1,25 +1,30 @@
 <template>
   <PageWrapper dense contentFullHeight fixedHeight contentClass="flex">
-    <OrganizationTree class="w-1/4 xl:w-1/5" @select="handleSelect" ref="organizationTreeRef" />
+    <OrganizationTree
+      class="w-1/4 xl:w-1/5"
+      @select="handleSelect"
+      ref="departmentTreeRef"
+      :type="OrganizationTreeType.ORGANIZATION_AND_DEPARTMENT"
+    />
     <BasicTable @register="registerTable" class="w-3/4 xl:w-4/5" :searchInfo="searchInfo">
       <template #toolbar>
         <a-button type="primary" @click="handleCreate" v-auth="'system:departments:create'"
-          >新增组织机构
+          >新增部门
         </a-button>
       </template>
       <template #action="{ record }">
         <TableAction
           :actions="[
             {
-              tooltip: '编辑组织机构',
+              tooltip: '编辑部门',
               icon: 'clarity:note-edit-line',
-              auth: 'system:organizations:update',
+              auth: 'system:departments:update',
               onClick: handleEdit.bind(null, record),
             },
             {
-              tooltip: '删除组织机构',
+              tooltip: '删除部门',
               icon: 'ant-design:delete-outlined',
-              auth: 'system:organizations:delete',
+              auth: 'system:departments:delete',
               color: 'error',
               popConfirm: {
                 title: '是否确认删除',
@@ -30,7 +35,7 @@
         />
       </template>
     </BasicTable>
-    <OrganizationModal @register="registerModal" @success="handleSuccess" />
+    <DepartmentModal @register="registerModal" @success="handleSuccess" />
   </PageWrapper>
 </template>
 <script lang="ts">
@@ -40,32 +45,40 @@
   import { PageWrapper } from '/@/components/Page';
 
   import { useModal } from '/@/components/Modal';
-  import OrganizationModal from './OrganizationModal.vue';
+  import DepartmentModal from './DepartmentModal.vue';
 
-  import { columns, searchFormSchema } from './organization.data';
+  import { columns, searchFormSchema } from './department.data';
   import { useGo } from '/@/hooks/web/usePage';
   import { RouteLocationRaw } from 'vue-router';
   import OrganizationTree from '../components/OrganizationTree.vue';
-  import { deleteOrganizationById, listOrganizations } from '/@/api/system';
+  import { deleteDepartmentById, listDepartments } from '/@/api/system';
   import { getTableSetting } from '/@/settings/defaultSetting';
   import {
+    OrganizationNodeType,
     OrganizationSelectedNode,
     OrganizationTreeActionType,
-  } from '/@/views/system/components/types';
+    OrganizationTreeType,
+  } from '../components/types';
 
   export default defineComponent({
-    name: 'OrganizationManagement',
-    components: { OrganizationTree, BasicTable, PageWrapper, OrganizationModal, TableAction },
+    name: 'DepartmentManagement',
+    components: {
+      OrganizationTree,
+      BasicTable,
+      PageWrapper,
+      DepartmentModal,
+      TableAction,
+    },
     setup() {
       const go = useGo();
-      const organizationTreeRef = ref<Nullable<OrganizationTreeActionType>>(null);
-      const currentOrganizationNode = reactive<Recordable>({});
+      const departmentTreeRef = ref<Nullable<OrganizationTreeActionType>>(null);
       const [registerModal, { openModal }] = useModal();
       const searchInfo = reactive<Recordable>({});
+      const currentOrganizationNode = reactive<Recordable>({});
       let tableProps = getTableSetting({
         searchPermissionCode: 'system:organizations:search',
-        title: '组织机构列表',
-        api: listOrganizations,
+        title: '部门列表',
+        api: listDepartments,
         rowKey: 'id',
         columns,
         formConfig: {
@@ -86,12 +99,12 @@
       });
       const [registerTable, { reload }] = useTable(tableProps);
 
-      function getOrganizationTree() {
-        const organizationTree = unref(organizationTreeRef);
-        if (!organizationTree) {
-          throw new Error('organization tree is null!');
+      function getDepartmentTree() {
+        const departmentTree = unref(departmentTreeRef);
+        if (!departmentTree) {
+          throw new Error('department tree is null!');
         }
-        return organizationTree;
+        return departmentTree;
       }
 
       function handleCreate() {
@@ -109,23 +122,34 @@
       }
 
       function handleDelete(record: Recordable) {
-        deleteOrganizationById(record.id).then(() => {
+        deleteDepartmentById(record.id).then(() => {
           reload();
         });
       }
 
       function handleSuccess() {
         reload();
-        getOrganizationTree().reload();
+        getDepartmentTree().reload();
       }
 
       function handleSelect(selectedNode: OrganizationSelectedNode) {
+        searchInfo.search_organizationIds = undefined;
+        searchInfo.search_organizationId = undefined;
         searchInfo.search_parentIds = undefined;
         searchInfo.search_parentId = undefined;
-        currentOrganizationNode.organizationId = selectedNode.node.organizationId;
-        selectedNode.keys.length > 1
-          ? (searchInfo.search_parentIds = selectedNode.keys)
-          : (searchInfo.search_parentId = selectedNode.keys[0]);
+        if (selectedNode.type === OrganizationNodeType.ORGANIZATION) {
+          selectedNode.keys.length > 1
+            ? (searchInfo.search_organizationIds = selectedNode.keys)
+            : (searchInfo.search_organizationId = selectedNode.keys[0]);
+          currentOrganizationNode.organizationId = selectedNode.node.organizationId;
+          currentOrganizationNode.departmentId = undefined;
+        } else {
+          selectedNode.keys.length > 1
+            ? (searchInfo.search_parentIds = selectedNode.keys)
+            : (searchInfo.search_parentId = selectedNode.keys[0]);
+          currentOrganizationNode.organizationId = selectedNode.node.organizationId;
+          currentOrganizationNode.departmentId = selectedNode.node.departmentId;
+        }
         reload();
       }
 
@@ -134,8 +158,8 @@
       }
 
       return {
-        organizationTreeRef,
-        currentOrganizationNode,
+        OrganizationTreeType,
+        departmentTreeRef,
         registerTable,
         registerModal,
         handleCreate,
@@ -145,6 +169,7 @@
         handleSelect,
         handleView,
         searchInfo,
+        currentOrganizationNode,
       };
     },
   });

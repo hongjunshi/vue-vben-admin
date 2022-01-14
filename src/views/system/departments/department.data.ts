@@ -4,7 +4,7 @@ import { Tag } from 'ant-design-vue';
 import { Time } from '/@/components/Time';
 import { useI18n } from '/@/hooks/web/useI18n';
 import { getEnum, getEnumItems } from '/@/api/system/utils';
-import { organizationsTree } from '/@/api/system';
+import { departmentsTree, organizationsTree } from '/@/api/system';
 
 export const { t } = useI18n();
 
@@ -12,18 +12,23 @@ const isEnableEnums: any[] = getEnum({ type: 'IsEnable' });
 
 export const columns: BasicColumn[] = [
   {
-    title: '组织机构代码',
+    title: '部门代码',
     dataIndex: 'code',
     width: 150,
     align: 'left',
   },
   {
-    title: '组织机构名称',
+    title: '部门名称',
     dataIndex: 'name',
     align: 'left',
   },
   {
-    title: '上级组织机构',
+    title: '所属组织机构',
+    dataIndex: 'organization.name'.split('.'),
+    align: 'left',
+  },
+  {
+    title: '上级部门',
     dataIndex: 'parent.name'.split('.'),
     align: 'left',
   },
@@ -52,13 +57,13 @@ export const columns: BasicColumn[] = [
 export const searchFormSchema: FormSchema[] = [
   {
     field: 'search_code',
-    label: '组织机构代码',
+    label: '部门代码',
     component: 'Input',
     colProps: { span: 8 },
   },
   {
     field: 'search_name',
-    label: '组织机构名称',
+    label: '部门名称',
     component: 'Input',
     colProps: { span: 8 },
   },
@@ -80,7 +85,24 @@ export const searchFormSchema: FormSchema[] = [
 ];
 export const parentIdSchema: FormSchema = {
   field: 'parent.id'.split('.'),
-  label: '上级组织机构',
+  label: '上级部门',
+  component: 'ApiTreeSelect',
+  componentProps: {
+    api: departmentsTree,
+    fieldNames: {
+      label: 'name',
+      key: 'id',
+      value: 'id',
+    },
+    params: {
+      search_organizationId: '-1',
+    },
+    getPopupContainer: () => document.body,
+  },
+};
+export const organizationIdSchema: FormSchema = {
+  field: 'organization.id'.split('.'),
+  label: '所属组织机构',
   component: 'ApiTreeSelect',
   required: true,
   componentProps: {
@@ -96,17 +118,17 @@ export const parentIdSchema: FormSchema = {
 export const formSchema: FormSchema[] = [
   {
     field: 'name',
-    label: '组织机构名称',
+    label: '部门名称',
     component: 'Input',
     required: true,
-    colProps: { lg: 24, md: 24 },
   },
   {
     field: 'code',
-    label: '组织机构代码',
+    label: '部门代码',
     required: true,
     component: 'Input',
   },
+  organizationIdSchema,
   parentIdSchema,
   {
     field: 'sortIndex',

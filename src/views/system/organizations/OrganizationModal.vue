@@ -1,5 +1,5 @@
 <template>
-  <BasicModal v-bind="$attrs" @register="registerModal" :title="getTitle" @ok="handleOk">
+  <BasicModal v-bind="$attrs" @register="registerModal" :title="getTitle" @ok="submit">
     <BasicForm @register="registerForm" @submit="handleSubmit" />
   </BasicModal>
 </template>
@@ -19,6 +19,7 @@
     setup(_, { emit }) {
       const isUpdate = ref(true);
       const rowId = ref('');
+      const parentId = ref('');
       const [registerForm, { setFieldsValue, resetFields, validate, submit, updateSchema }] =
         useForm({
           labelWidth: 120,
@@ -35,19 +36,18 @@
         await updateSchema(cloneDeep(parentIdSchema));
         setModalProps({ confirmLoading: false, width: '50%' });
         isUpdate.value = !!data?.isUpdate;
+        parentId.value = data?.organizationId;
 
         if (unref(isUpdate)) {
           const record = await loadOrganizationById(data.record.id);
           rowId.value = record.id;
           await setFieldsValue(record);
+        } else {
+          await setFieldsValue({ parent: { id: parentId.value } });
         }
       });
 
       const getTitle = computed(() => (!unref(isUpdate) ? '新增组织机构' : '编辑组织机构'));
-
-      async function handleOk() {
-        await submit();
-      }
 
       async function handleSubmit(data) {
         try {
@@ -65,7 +65,7 @@
         }
       }
 
-      return { registerModal, registerForm, getTitle, handleOk, handleSubmit };
+      return { registerModal, registerForm, getTitle, submit, handleSubmit };
     },
   });
 </script>

@@ -2124,7 +2124,7 @@ export interface DepartmentTreeResult {
    *
    * 返回的泛型数据
    */
-  data?: Department[];
+  data?: DepartmentEntity[];
   /**
    *
    * 返回消息
@@ -5566,6 +5566,12 @@ export interface PermissionEntity {
    */
   icon?: string;
   idIfNotProvide?: string;
+  /**
+   *
+   * 是否半选
+   * Format: int32
+   */
+  isHalfCheck?: 1 | 0;
   /**
    *
    * 最后修改时间

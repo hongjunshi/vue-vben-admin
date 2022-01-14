@@ -1,5 +1,5 @@
 <template>
-  <BasicModal v-bind="$attrs" @register="registerModal" :title="getTitle" @ok="handleOk">
+  <BasicModal v-bind="$attrs" @register="registerModal" :title="getTitle" @ok="submit">
     <BasicForm @register="registerForm" @submit="handleSubmit">
       <template #permissions="{ model, field }">
         <BasicTree
@@ -102,12 +102,9 @@
       const getTitle = computed(() => (!unref(isUpdate) ? '新增角色' : '编辑角色'));
 
       function handlePermissions(checkedKeys, e, model, field) {
+        console.log(checkedKeys, e);
         model[field] = checkedKeys;
         halfCheckPermissionKeys.value = e.halfCheckedKeys ? e.halfCheckedKeys : [];
-      }
-
-      async function handleOk() {
-        await submit();
       }
 
       async function handleSubmit(data) {
@@ -139,8 +136,8 @@
         registerModal,
         registerForm,
         getTitle,
+        submit,
         handlePermissions,
-        handleOk,
         handleSubmit,
       };
     },

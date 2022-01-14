@@ -1,5 +1,5 @@
 <template>
-  <BasicModal v-bind="$attrs" @register="registerModal" :title="getTitle" @ok="handleOk">
+  <BasicModal v-bind="$attrs" @register="registerModal" :title="getTitle" @ok="submit">
     <BasicForm @register="registerForm" @submit="handleSubmit" />
   </BasicModal>
 </template>
@@ -52,10 +52,6 @@
 
       const getTitle = computed(() => (!unref(isUpdate) ? '新增功能' : '编辑功能'));
 
-      async function handleOk() {
-        await submit();
-      }
-
       async function handleSubmit(data) {
         try {
           const values = await validate();
@@ -83,7 +79,7 @@
         }
       }
 
-      return { registerModal, registerForm, getTitle, handleOk, handleSubmit };
+      return { registerModal, registerForm, getTitle, submit, handleSubmit };
     },
   });
 </script>

@@ -30,7 +30,6 @@ import {
   ApplicationEntity,
   Attachment,
   AuditableEntity,
-  Department,
   DepartmentEntity,
   DictionaryEntity,
   DictionaryTypeEntity,
@@ -286,7 +285,7 @@ createDepartment.key = '/departments';
 export const departmentsTree = (
   params: DepartmentsTreeQueryParams,
   options?: RequestOptions
-): Promise<Department[]> => {
+): Promise<DepartmentEntity[]> => {
   return defHttp.get(
     overrideConfigs({
       url: departmentsTree.key,
