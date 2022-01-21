@@ -15,6 +15,7 @@ import {
   ListDictionariesQueryParams,
   ListDictionaryTypesQueryParams,
   ListDutiesQueryParams,
+  ListAllDutiesQueryParams,
   ListApisQueryParams,
   ApiTreeQueryParams,
   ListOrganizationsQueryParams,
@@ -22,7 +23,6 @@ import {
   ListPermissionsTreeQueryParams,
   ListReservableConfigsQueryParams,
   ListResourcesQueryParams,
-  ListAllResourcesQueryParams,
   ListRolesQueryParams,
   ListAllRolesQueryParams,
   ListUsersQueryParams,
@@ -789,6 +789,26 @@ export const createDuty = (body: DutyEntity, options?: RequestOptions): Promise<
 
 /** Key is end point string without base url */
 createDuty.key = '/duties';
+
+/**
+ * 根据条件查询全部岗位
+ */
+export const listAllDuties = (
+  params: ListAllDutiesQueryParams,
+  options?: RequestOptions
+): Promise<DutyEntity[]> => {
+  return defHttp.get(
+    overrideConfigs({
+      url: listAllDuties.key,
+      params: params,
+      data: undefined,
+    }),
+    overrideOptions(options)
+  );
+};
+
+/** Key is end point string without base url */
+listAllDuties.key = '/duties/all';
 
 /**
  * 根据ID查询岗位
@@ -1681,26 +1701,6 @@ export const createResource = (
 
 /** Key is end point string without base url */
 createResource.key = '/resources';
-
-/**
- * 根据条件查询全部资源
- */
-export const listAllResources = (
-  params: ListAllResourcesQueryParams,
-  options?: RequestOptions
-): Promise<ResourceEntity[]> => {
-  return defHttp.get(
-    overrideConfigs({
-      url: listAllResources.key,
-      params: params,
-      data: undefined,
-    }),
-    overrideOptions(options)
-  );
-};
-
-/** Key is end point string without base url */
-listAllResources.key = '/resources/all';
 
 /**
  * 根据ID查询

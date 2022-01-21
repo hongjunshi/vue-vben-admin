@@ -398,6 +398,11 @@ export interface ApplicationEntity {
   lastModifyUser?: UserEntity;
   /**
    *
+   * 角色列表
+   */
+  roles?: RoleEntity[];
+  /**
+   *
    * 排序索引
    * Format: int32
    */
@@ -1254,6 +1259,32 @@ export interface DataRestResult_List_Dictionary_ {
 
 /**
 * 
+        * DataRestResult«List«Duty»»
+      
+        * 带数据的返回结果
+*/
+
+export interface DataRestResult_List_Duty_ {
+  /**
+   *
+   * 返回状态码
+   * Format: int32
+   */
+  code?: 200 | 201 | 204 | 400 | 401 | 403 | 404 | 408 | 500 | 503 | 504;
+  /**
+   *
+   * 返回的泛型数据
+   */
+  data?: Duty[];
+  /**
+   *
+   * 返回消息
+   */
+  message?: string;
+}
+
+/**
+* 
         * DataRestResult«List«Map«string,object»»»
       
         * 带数据的返回结果
@@ -1323,32 +1354,6 @@ export interface DataRestResult_List_Permission_ {
    * 返回的泛型数据
    */
   data?: Permission[];
-  /**
-   *
-   * 返回消息
-   */
-  message?: string;
-}
-
-/**
-* 
-        * DataRestResult«List«ResourceEntity»»
-      
-        * 带数据的返回结果
-*/
-
-export interface DataRestResult_List_ResourceEntity_ {
-  /**
-   *
-   * 返回状态码
-   * Format: int32
-   */
-  code?: 200 | 201 | 204 | 400 | 401 | 403 | 404 | 408 | 500 | 503 | 504;
-  /**
-   *
-   * 返回的泛型数据
-   */
-  data?: ResourceEntity[];
   /**
    *
    * 返回消息
@@ -2605,52 +2610,62 @@ export interface ListAllApplicationsResult {
   message?: string;
 }
 
-export interface ListAllResourcesQueryParams {
+export interface ListAllDutiesQueryParams {
   /**
    *
-   * 查询条件:资源代码，等于
+   * 查询条件:岗位代码，模糊匹配
    */
   search_code?: string;
   /**
    *
-   * 查询条件:资源描述，等于
+   * 查询条件:创建日期起，格式yyyy-mm-dd
+   */
+  search_createDateBegin?: string;
+  /**
+   *
+   * 查询条件:创建日期止，格式yyyy-mm-dd
+   */
+  search_createDateEnd?: string;
+  /**
+   *
+   * 查询条件:岗位描述，模糊匹配
    */
   search_description?: string;
   /**
    *
-   * 查询条件:资源名称，模糊匹配
+   * 查询条件:是否可用，，1：是，0：否，精确匹配
+   */
+  search_isEnable?: '0' | '1';
+  /**
+   *
+   * 查询条件:是否系统预置，，1：是，0：否，精确匹配
+   */
+  search_isSystem?: '0' | '1';
+  /**
+   *
+   * 查询条件:岗位级别，关联岗位级别字典，精确匹配
+   */
+  search_level?: string;
+  /**
+   *
+   * 查询条件:岗位级别名称，模糊匹配
+   */
+  search_levelName?: string;
+  /**
+   *
+   * 查询条件:岗位名称，模糊匹配
    */
   search_name?: string;
-  /**
-   *
-   * 查询条件:资源ID，等于
-   */
-  search_service?: string;
-  /**
-   *
-   * 查询条件:排序索引，等于
-   */
-  search_sortIndex?: string;
-  /**
-   *
-   * 查询条件:资源类型，1：Spring Cloud资源，2：HTTP资源，等于
-   */
-  search_type?: string;
-  /**
-   *
-   * 查询条件:URL地址，等于
-   */
-  search_url?: string;
 }
 
 /**
 * 
-        * ListAllResourcesResult
+        * ListAllDutyResult
       
-        * 根据参数查询全部数据结果
+        * 根据参数查询全部岗位数据结果
 */
 
-export interface ListAllResourcesResult {
+export interface ListAllDutyResult {
   /**
    *
    * 返回状态码
@@ -2661,7 +2676,7 @@ export interface ListAllResourcesResult {
    *
    * 返回的泛型数据
    */
-  data?: ResourceEntity[];
+  data?: DutyEntity[];
   /**
    *
    * 返回消息
@@ -4269,6 +4284,7 @@ export interface LoadUserByIdResult {
    */
   message?: string;
 }
+
 /**
 * 
         * Map«string,object»

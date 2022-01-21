@@ -43,7 +43,9 @@
           rowId.value = record.id;
           await setFieldsValue(record);
         } else {
-          await setFieldsValue({ parent: { id: parentId.value } });
+          if (parentId.value) {
+            await setFieldsValue({ parent: { id: parentId.value } });
+          }
         }
       });
 

@@ -7,19 +7,27 @@
   import { computed, defineComponent, ref, unref } from 'vue';
   import { BasicModal, useModalInner } from '/@/components/Modal';
   import { BasicForm, FormActionType, useForm } from '/@/components/Form/index';
-  import { formSchema, organizationIdSchema, parentIdSchema } from './department.data';
-  import { createDepartment, loadDepartmentById, updateDepartment } from '/@/api/system';
+  import {
+    confirmPasswordCreateSchema,
+    confirmPasswordUpdateSchema,
+    departmentIdSchema,
+    formSchema,
+    organizationIdSchema,
+    passwordCreateSchema,
+    passwordUpdateSchema,
+  } from './user.data';
+  import { createUser, loadUserById, updateUser } from '/@/api/system';
   import { cloneDeep, merge } from 'lodash-es';
 
   export default defineComponent({
-    name: 'DepartmentModal',
+    name: 'UserModal',
     components: { BasicModal, BasicForm },
     emits: ['success', 'register'],
     setup(_, { emit }) {
       const formRef = ref<Nullable<FormActionType>>(null);
       const isUpdate = ref(true);
       const organizationId = ref('');
-      const parentId = ref('');
+      const departmentId = ref('');
       const rowId = ref('');
       const [registerForm, { setFieldsValue, resetFields, submit, updateSchema }] = useForm({
         labelWidth: 120,
@@ -31,63 +39,77 @@
         baseColProps: { lg: 12, md: 24 },
       });
 
-      function updateParentSchema(e: any) {
-        let parentIdField = cloneDeep(parentIdSchema);
-        merge(parentIdField, {
+      function updateDepartmentSchema(e: any) {
+        let departmentIdField = cloneDeep(departmentIdSchema);
+        merge(departmentIdField, {
           componentProps: {
             params: {
               search_organizationId: e,
             },
           },
         });
-        updateSchema(parentIdField);
+        updateSchema(departmentIdField);
       }
 
       const [registerModal, { setModalProps, closeModal }] = useModalInner(async (data) => {
+        setModalProps({ confirmLoading: false, width: '50%' });
         await resetFields();
         let organizationIdField = cloneDeep(organizationIdSchema);
         merge(organizationIdField, {
           componentProps: {
             onChange: (organizationId: any) => {
-              updateParentSchema(organizationId);
-              setFieldsValue({ parent: { id: null } });
+              updateDepartmentSchema(organizationId);
+              setFieldsValue({ department: { id: null } });
             },
           },
         });
         await updateSchema([organizationIdField]);
-        setModalProps({ confirmLoading: false, width: '50%' });
         isUpdate.value = !!data?.isUpdate;
 
         if (unref(isUpdate)) {
-          const record = await loadDepartmentById(data.record.id);
+          const record = await loadUserById(data.record.id);
           rowId.value = record.id;
-          await updateParentSchema(record.organization.id);
-          await setFieldsValue(record);
+          await updateDepartmentSchema(record.organization.id);
+
+          await updateSchema([passwordUpdateSchema, confirmPasswordUpdateSchema]);
+          await setFieldsValue({
+            ...record,
+            roles: record.roles ? record.roles.map((item) => item.id) : [],
+            duties: record.duties ? record.duties.map((item) => item.id) : [],
+          });
         } else {
           organizationId.value = data?.organizationId;
-          parentId.value = data?.departmentId;
+          departmentId.value = data?.departmentId;
+
+          await updateSchema([passwordCreateSchema, confirmPasswordCreateSchema]);
           if (organizationId.value) {
-            await updateParentSchema(organizationId.value);
+            await updateDepartmentSchema(organizationId.value);
             await setFieldsValue({ organization: { id: organizationId.value } });
           }
-          if (parentId.value) {
-            await setFieldsValue({ parent: { id: parentId.value } });
+          if (departmentId.value) {
+            await setFieldsValue({ department: { id: departmentId.value } });
           }
         }
       });
 
-      const getTitle = computed(() => (!unref(isUpdate) ? '新增部门' : '编辑部门'));
+      const getTitle = computed(() => (!unref(isUpdate) ? '新增用户' : '编辑用户'));
 
       async function handleSubmit(data) {
         try {
           setModalProps({ confirmLoading: true });
-          if (data.parent && data.parent.id == null) {
-            data.parent = null;
-          }
+          data = {
+            ...data,
+            roles: data.roles.map((i) => {
+              return { id: i };
+            }),
+            duties: data.duties.map((i) => {
+              return { id: i };
+            }),
+          };
           if (unref(isUpdate)) {
-            await updateDepartment(rowId.value, data);
+            await updateUser(rowId.value, data);
           } else {
-            await createDepartment(data);
+            await createUser(data);
           }
           closeModal();
           emit('success', { isUpdate: unref(isUpdate), values: { ...data, id: rowId.value } });

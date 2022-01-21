@@ -92,9 +92,7 @@
           rowId.value = record.id;
           await setFieldsValue({
             ...record,
-            ...{
-              permissions: record.permissions ? record.permissions.map((item) => item.code) : [],
-            },
+            permissions: record.permissions ? record.permissions.map((item) => item.id) : [],
           });
         }
       });
