@@ -160,6 +160,7 @@ dependencies:
   vue: 3.2.27
   vue-i18n: 9.1.9_vue@3.2.27
   vue-json-pretty: 1.8.2
+  vue-request: 1.2.4_vue@3.2.27
   vue-router: 4.0.12_vue@3.2.27
   vue-types: 4.1.1_vue@3.2.27
   xlsx: 0.17.5
@@ -12094,6 +12095,14 @@ packages:
   /vue-json-pretty/1.8.2:
     resolution: {integrity: sha512-8DbgvyXpBrhDdBzz8RTe+POZ+HI6nSa33DqsPMWhMkv0u0ATklgxErUM3XRRvTzOQ/02Sh1LNWJ/rkqTow2rbA==}
     engines: {node: '>= 10.0.0', npm: '>= 5.0.0'}
+    dev: false
+
+  /vue-request/1.2.4_vue@3.2.27:
+    resolution: {integrity: sha512-i+i+6Fog6F8EtYUeueumzKS9Sg06CvjsMXH8TK0YSBxY4sDxIJ+snTEke5rLqiV9d19DTuJOxPQFjTBUpsMtXA==}
+    peerDependencies:
+      vue: ^3.0.0
+    dependencies:
+      vue: 3.2.27
     dev: false
 
   /vue-router/4.0.12_vue@3.2.27:

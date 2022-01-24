@@ -1,6 +1,8 @@
 import { usePermission } from '/@/hooks/web/usePermission';
 import { merge } from 'lodash-es';
 import { Props } from 'ant-design-vue/lib/form/useForm';
+import { SorterResult } from '/@/components/Table';
+import { isArray } from '/@/utils/is';
 export interface SearchTableProps extends Props {
   searchPermissionCode: string;
 }
@@ -32,6 +34,22 @@ const tableSetting = {
   bordered: true,
   // showIndexColumn: false,
   canResize: true,
+  sortFn: (sortInfo: SorterResult) => {
+    const { field, order } = sortInfo;
+    console.log(field, order);
+    if (field && order) {
+      console.log(isArray(field));
+      const sort = `${isArray(field) ? field.join('.') : field},${
+        order === 'ascend' ? 'asc' : 'desc'
+      }`;
+      console.log(sort);
+      return {
+        sort,
+      };
+    } else {
+      return {};
+    }
+  },
 };
 function tableSearchSetting(auth: string) {
   const { hasPermission } = usePermission();

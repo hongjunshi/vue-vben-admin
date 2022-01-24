@@ -16,39 +16,45 @@ export const columns: BasicColumn[] = [
     dataIndex: 'username',
     width: 100,
     align: 'left',
+    sorter: true,
   },
   {
     title: '姓名',
     dataIndex: 'name',
     align: 'left',
     width: 100,
+    sorter: true,
   },
   {
     title: '所属组织机构',
     dataIndex: 'organization.name'.split('.'),
     align: 'left',
+    sorter: true,
   },
   {
     title: '所属部门',
-    dataIndex: 'department.name'.split('.'),
+    dataIndex: ['department', 'name'],
     align: 'left',
     width: 100,
+    sorter: true,
   },
   {
     title: '手机号码',
     dataIndex: 'mobile',
     width: 110,
     align: 'left',
+    sorter: true,
   },
   {
     title: '电子邮件',
     dataIndex: 'email',
     align: 'left',
+    sorter: true,
   },
   {
     title: '是否启用',
     dataIndex: 'status',
-    width: 80,
+    width: 90,
     customRender: ({ record }) => {
       const status = record.isEnable;
       const enable = ~~status === 1;
@@ -56,11 +62,13 @@ export const columns: BasicColumn[] = [
       const text = isEnableEnums.find((i) => i.value === record.isEnable)?.name;
       return h(Tag, { color: color }, () => text);
     },
+    sorter: true,
   },
   {
     title: '创建时间',
     dataIndex: 'createTime',
     width: 160,
+    sorter: true,
     customRender: ({ record }) => {
       return h(Time, { value: record.createTime, mode: 'datetime' });
     },

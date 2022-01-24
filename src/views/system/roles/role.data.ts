@@ -14,28 +14,32 @@ export const columns: BasicColumn[] = [
     title: '角色名称',
     dataIndex: 'name',
     align: 'left',
+    sorter: true,
   },
   {
     title: '角色代码',
     dataIndex: 'code',
     width: 200,
     align: 'left',
+    sorter: true,
   },
   {
     title: '角色级别',
     dataIndex: 'level.name'.split('.'),
     align: 'left',
     width: 100,
+    sorter: true,
   },
   {
     title: '描述',
     dataIndex: 'description',
     align: 'left',
+    sorter: true,
   },
   {
     title: '是否预置',
     dataIndex: 'isSystem',
-    width: 80,
+    width: 90,
     customRender: ({ record }) => {
       const isSystem = record?.isSystem;
       const system = ~~isSystem === 1;
@@ -43,11 +47,12 @@ export const columns: BasicColumn[] = [
       const text = isSystemEnums.find((i) => i.value === isSystem)?.name;
       return h(Tag, { color: color }, () => text);
     },
+    sorter: true,
   },
   {
     title: '是否启用',
     dataIndex: 'status',
-    width: 80,
+    width: 90,
     customRender: ({ record }) => {
       const isEnable = record?.isEnable;
       const enable = ~~isEnable === 1;
@@ -55,6 +60,7 @@ export const columns: BasicColumn[] = [
       const text = isEnableEnums.find((i) => i.value === isEnable)?.name;
       return h(Tag, { color: color }, () => text);
     },
+    sorter: true,
   },
   {
     title: '创建时间',
@@ -64,6 +70,7 @@ export const columns: BasicColumn[] = [
     customRender: ({ record }) => {
       return h(Time, { value: record.createTime, mode: 'datetime' });
     },
+    sorter: true,
   },
 ];
 

@@ -16,21 +16,24 @@ export const columns: BasicColumn[] = [
     dataIndex: 'code',
     width: 150,
     align: 'left',
+    sorter: true,
   },
   {
     title: '组织机构名称',
     dataIndex: 'name',
     align: 'left',
+    sorter: true,
   },
   {
     title: '上级组织机构',
     dataIndex: 'parent.name'.split('.'),
     align: 'left',
+    sorter: true,
   },
   {
     title: '是否启用',
     dataIndex: 'status',
-    width: 80,
+    width: 90,
     customRender: ({ record }) => {
       const status = record.isEnable;
       const enable = ~~status === 1;
@@ -38,6 +41,7 @@ export const columns: BasicColumn[] = [
       const text = isEnableEnums.find((i) => i.value === record.isEnable)?.name;
       return h(Tag, { color: color }, () => text);
     },
+    sorter: true,
   },
   {
     title: '创建时间',
@@ -46,6 +50,7 @@ export const columns: BasicColumn[] = [
     customRender: ({ record }) => {
       return h(Time, { value: record.createTime, mode: 'datetime' });
     },
+    sorter: true,
   },
 ];
 

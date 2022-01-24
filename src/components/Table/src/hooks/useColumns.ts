@@ -15,7 +15,7 @@ function handleItem(item: BasicColumn, ellipsis: boolean) {
   item.align = item.align || DEFAULT_ALIGN;
   if (ellipsis) {
     if (!key) {
-      item.key = dataIndex;
+      item.key = isArray(dataIndex) ? dataIndex.join('.') : dataIndex + '';
     }
     if (!isBoolean(item.ellipsis)) {
       Object.assign(item, {
@@ -40,7 +40,7 @@ function handleChildren(children: BasicColumn[] | undefined, ellipsis: boolean) 
 function handleIndexColumn(
   propsRef: ComputedRef<BasicTableProps>,
   getPaginationRef: ComputedRef<boolean | PaginationProps>,
-  columns: BasicColumn[],
+  columns: BasicColumn[]
 ) {
   const { t } = useI18n();
 
@@ -102,7 +102,7 @@ function handleActionColumn(propsRef: ComputedRef<BasicTableProps>, columns: Bas
 
 export function useColumns(
   propsRef: ComputedRef<BasicTableProps>,
-  getPaginationRef: ComputedRef<boolean | PaginationProps>,
+  getPaginationRef: ComputedRef<boolean | PaginationProps>
 ) {
   const columnsRef = ref(unref(propsRef).columns) as unknown as Ref<BasicColumn[]>;
   let cacheColumns = unref(propsRef).columns;
@@ -122,7 +122,7 @@ export function useColumns(
 
       handleItem(
         item,
-        Reflect.has(item, 'ellipsis') ? !!item.ellipsis : !!ellipsis && !customRender && !slots,
+        Reflect.has(item, 'ellipsis') ? !!item.ellipsis : !!ellipsis && !customRender && !slots
       );
     });
     return columns;
@@ -156,7 +156,7 @@ export function useColumns(
 
         if (!slots || !slots?.title) {
           column.slots = { title: `header-${dataIndex}`, ...(slots || {}) };
-          column.customTitle = column.title;
+          column.customTitle = column.title as any;
           Reflect.deleteProperty(column, 'title');
         }
         const isDefaultAction = [INDEX_COLUMN_FLAG, ACTION_COLUMN_FLAG].includes(flag!);
@@ -179,7 +179,7 @@ export function useColumns(
     (columns) => {
       columnsRef.value = columns;
       cacheColumns = columns?.filter((item) => !item.flag) ?? [];
-    },
+    }
   );
 
   function setCacheColumnsByField(dataIndex: string | undefined, value: Partial<BasicColumn>) {
@@ -218,7 +218,11 @@ export function useColumns(
       cacheColumns.forEach((item) => {
         newColumns.push({
           ...item,
-          defaultHidden: !columnKeys.includes(item.dataIndex! || (item.key as string)),
+          defaultHidden: !columnKeys.includes(
+            isArray(item.dataIndex!)
+              ? item.dataIndex.join('.')
+              : item.dataIndex + '' || (item.key as string)
+          ),
         });
       });
       // Sort according to another array
@@ -280,7 +284,7 @@ function sortFixedColumn(columns: BasicColumn[]) {
     defColumns.push(column);
   }
   return [...fixedLeftColumns, ...defColumns, ...fixedRightColumns].filter(
-    (item) => !item.defaultHidden,
+    (item) => !item.defaultHidden
   );
 }
 

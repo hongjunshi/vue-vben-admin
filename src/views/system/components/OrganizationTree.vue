@@ -12,12 +12,13 @@
   </div>
 </template>
 <script lang="ts">
-  import { defineComponent, onMounted, PropType, ref, unref } from 'vue';
+  import { defineComponent, nextTick, onMounted, PropType, ref, unref } from 'vue';
 
   import { BasicTree, TreeItem } from '/@/components/Tree';
   import { departmentsTree, organizationsTree } from '/@/api/system';
   import { DepartmentEntity, OrganizationEntity } from '/@/api/system/types';
   import { OrganizationNodeType, OrganizationSelectedNode, OrganizationTreeType } from './types';
+  import { TreeActionType } from '/@/components/Tree/src/Tree.vue';
 
   export default defineComponent({
     name: 'OrganizationTree',
@@ -37,6 +38,7 @@
     emits: ['select'],
     setup(props, { emit }) {
       const treeData = ref<TreeItem[]>([]);
+      const treeRef = ref<Nullable<TreeActionType>>(null);
       async function reload() {
         let data: TreeItem[] = [];
         if (props.type !== OrganizationTreeType.DEPARTMENT) {
@@ -47,6 +49,16 @@
           data = transformDepartment(departments);
         }
         treeData.value = data;
+        nextTick(() => {
+          getTree().expandAll(true);
+        });
+      }
+      function getTree() {
+        const tree = unref(treeRef);
+        if (!tree) {
+          throw new Error('tree is null!');
+        }
+        return tree;
       }
 
       function transformOrganization(data: OrganizationEntity[]) {
@@ -108,7 +120,7 @@
       onMounted(() => {
         reload();
       });
-      return { treeData, handleSelect, reload };
+      return { treeData, treeRef, handleSelect, reload };
     },
   });
 </script>

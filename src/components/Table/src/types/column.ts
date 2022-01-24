@@ -1,4 +1,5 @@
 import { VNodeChild } from 'vue';
+import { DataIndex } from 'ant-design-vue/lib/vc-table/interface';
 
 export interface ColumnFilterItem {
   text?: string;
@@ -53,7 +54,7 @@ export interface ColumnProps<T> {
    * Display field of the data record, could be set like a.b.c
    * @type string
    */
-  dataIndex?: string;
+  dataIndex?: DataIndex;
 
   /**
    * Default filtered values
